@@ -1,56 +1,67 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
-
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import Home from "pages/Home";
+import Login from "pages/Login";
+import Register from "pages/Register";
+import Detail from "pages/Detail";
+import ErrorPage from "pages/ErrorPage";
+import Product from "pages/Product";
+import Cart from "pages/Cart";
+import Checkout from "pages/Checkout";
+import Payment from "pages/Payment";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsMobile } from "app/stateDevide";
+import { PHONE_BREAKPOINT, TABLET_BREAKPOINT } from "constant/breakpoint";
 function App() {
+  const [width, setWidth] = useState(undefined);
+  const dispatch = useDispatch();
+  const isMobile = useSelector((state) => state.stateDevide.isMobile);
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    // console.log(width);
+    if (width >= PHONE_BREAKPOINT) {
+      dispatch(setIsMobile(false));
+    } else {
+      dispatch(setIsMobile(true));
+    }
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [width]);
+  // const { userInfo } = useSelector((state) => state.user);
+  // const navigate = useNavigate();
+  // useEffect(() => {
+  //   if (!userInfo) {
+  //     navigate("/login");
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+    <div
+      className={`w-full overflow-x-hidden ${
+        isMobile
+          ? `max-w-[${PHONE_BREAKPOINT}]`
+          : `max-w-[${TABLET_BREAKPOINT}]`
+      }`}
+    >
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/products" element={<Product />} />
+        <Route path="/products/:id" element={<Detail />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/payment" element={<Payment />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="*" element={<ErrorPage />} />
+      </Routes>
     </div>
   );
 }
