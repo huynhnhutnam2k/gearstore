@@ -20,7 +20,8 @@ export const userSlice = createSlice({
       })
       .addCase(loginAction.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.userInfo = action.payload;
+        state.userInfo = action.payload.user;
+        state.msg = action.payload.message;
       })
       .addCase(loginAction.rejected, (state) => {
         state.isLoading = false;

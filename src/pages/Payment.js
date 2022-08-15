@@ -1,12 +1,16 @@
+import { changePayment } from "app/orderSlice";
 import { Button } from "components/button";
 import Layout from "components/layout/layout";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const Payment = () => {
   const [payment, setPayment] = React.useState("");
+  const { order } = useSelector((state) => state.order);
+  const dispatch = useDispatch();
   const handlePayment = (e) => {
     e.preventDefault();
-    console.log(payment);
+    dispatch(changePayment({ ...order, payment }));
   };
   return (
     <Layout>
@@ -19,6 +23,7 @@ const Payment = () => {
             <input
               type="radio"
               name="payment"
+              value="test"
               id="payment"
               onClick={(e) => setPayment(e.target.value)}
             />

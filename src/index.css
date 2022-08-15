@@ -99,4 +99,18 @@
     #checkbox:checked~ .line-bottom{
         @apply  translate-y-0 -rotate-45
     }
+
+    /*check profile*/
+    .profile{ 
+        @apply relative
+    }
+    .profile-ul{
+        @apply absolute w-[150px] bg-white shadow-lg rounded px-2 duration-200 top-12 opacity-0 invisible
+    }
+    .profile:hover .profile-ul{
+        @apply opacity-100 visible top-5
+    }
+    .profile ion-icon{
+        pointer-event: none;
+    }
   }

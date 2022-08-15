@@ -12,7 +12,7 @@ import { NavLink, useLocation } from "react-router-dom";
 
 const Detail = () => {
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0, "smooth");
   }, []);
   const { isMobile } = useSelector((state) => state.stateDevide);
   const { product } = useSelector((state) => state.product);

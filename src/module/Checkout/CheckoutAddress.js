@@ -3,6 +3,8 @@ import Data from "constant/data.json";
 import { useForm } from "react-hook-form";
 import { Button } from "components/button";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addOrder } from "app/orderSlice";
 const CheckoutAddress = () => {
   const navigate = useNavigate();
   const {
@@ -13,8 +15,26 @@ const CheckoutAddress = () => {
   } = useForm({
     mode: "onChange",
   });
+  const { userInfo } = useSelector((state) => state.user);
+  const { total, cart } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
   const checkout = async (values) => {
-    await console.log(values);
+    const payload = {
+      user: userInfo.user._id,
+      username: values.username,
+      email: values.email,
+      phone: values.phone,
+      address: {
+        districts: values.districts,
+        ward: values.ward,
+        city: values.city,
+        address: values.address,
+      },
+      payment: "cod",
+      total: total,
+      products: cart,
+    };
+    dispatch(addOrder(payload));
     navigate("/payment");
   };
   // console.log(getValues("city"), getValues("districts"), getValues("ward"));
@@ -65,7 +85,7 @@ const CheckoutAddress = () => {
             className="w-full border border-[#ccc] rounded-md p-2 h-10"
             {...register("city")}
             onChange={(e) => {
-              console.log(e.target.value);
+              // console.log(e.target.value);
               const city = Data.filter((item) => item.Name === e.target.value);
               // console.log(city);
               setDistrict(city[0].Districts);

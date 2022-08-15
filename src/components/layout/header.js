@@ -1,5 +1,6 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link, NavLink } from "react-router-dom";
 const nav = [
   {
     name: "Home",
@@ -49,6 +50,7 @@ const Header = () => {
       document.removeEventListener("scroll", handleScroll);
     };
   }, [height]);
+  const { userInfo } = useSelector((state) => state.user);
   return (
     <div className="w-full h-[80px] shadow-sm " ref={headerRef}>
       <div className="flex w-full max-w-[1170px] mx-auto h-[80px] items-center justify-between ">
@@ -68,9 +70,28 @@ const Header = () => {
           <NavLink to="/cart">
             <ion-icon name="cart-outline"></ion-icon>
           </NavLink>
-          <NavLink to="/login">
-            <ion-icon name="person-outline"></ion-icon>
-          </NavLink>
+          {userInfo ? (
+            <div className="profile">
+              <ion-icon name="person-outline"></ion-icon>
+              <ul className="profile-ul">
+                <li className="hover:bg-green-300 hover:text-white">
+                  <Link to="/" className="hover:text-white">
+                    Profile
+                  </Link>
+                </li>
+                <li className="hover:bg-green-300 hover:text-white">
+                  <Link to="/" className="hover:text-white">
+                    Your order
+                  </Link>
+                </li>
+                <li className="hover:bg-green-300 hover:text-white">Log out</li>
+              </ul>
+            </div>
+          ) : (
+            <NavLink to="/login">
+              <ion-icon name="person-outline"></ion-icon>
+            </NavLink>
+          )}
         </div>
       </div>
     </div>

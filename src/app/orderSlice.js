@@ -1,16 +1,56 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { url } from "./url";
 
 export const orderSlice = createSlice({
   name: "order",
   initialState: {
-    order: [],
+    order: {},
+    addSuccess: false,
+    isLoading: false,
+    isError: false,
+    msg: "",
   },
   reducers: {
     addOrder: (state, action) => {
-      state.order.push(action.payload);
+      state.order = action.payload;
+    },
+    changePayment: (state, action) => {
+      state.order = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(addNewOrder.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addNewOrder.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.addSuccess = true;
+        state.msg = action.payload.message;
+      })
+      .addCase(addNewOrder.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload.message;
+      });
+  },
 });
-
-export const { addOrder } = orderSlice.actions;
+export const addNewOrder = createAsyncThunk(
+  "order/addNewOrder",
+  async (order, token) => {
+    try {
+      const res = await axios.post(`${url}/order`, order, {
+        headers: {
+          token: `Bearer ${token}`,
+          " Content-type": "application/json",
+        },
+      });
+      return res?.data;
+    } catch (error) {
+      console.log(error.response);
+    }
+  }
+);
+export const { addOrder, changePayment } = orderSlice.actions;
 export default orderSlice.reducer;
