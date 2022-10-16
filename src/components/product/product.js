@@ -11,11 +11,11 @@ const Product = ({ isSlide = true, product, ...props }) => {
         <img src={`${product?.image[0]}`} alt="" />
         <img src={`${product?.image[0]}`} alt="" />
       </div>
-      <div className="flex flex-col items-center z-20">
+      <div className="flex flex-col items-center z-20 mt-auto">
         <div className="cursor-pointer">{product?.name}</div>
         <p>{product?.price}</p>
       </div>
-      <div className="product-effect">
+      <div className="product-effect ">
         <div className="product-effect-item delay-150">
           <ion-icon name="star-outline"></ion-icon>
         </div>

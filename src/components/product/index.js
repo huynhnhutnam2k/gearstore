@@ -1,3 +1,4 @@
 import Product from "./product";
 import ProductFullsize from "./productFullsize";
-export { Product, ProductFullsize };
+import Pro from "./pro";
+export { Product, ProductFullsize, Pro };

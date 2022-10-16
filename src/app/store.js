@@ -5,7 +5,7 @@ import orderReducer from "./orderSlice";
 import stateDevideReducer from "./stateDevide";
 import userReducer from "features/users/userSlice";
 import productReducer from "features/product/productSlice";
-import cartReducer from "../module/Cart/cartSlice";
+import cartReducer from "./cartSlice";
 export const store = configureStore({
   reducer: {
     counter: counterReducer,

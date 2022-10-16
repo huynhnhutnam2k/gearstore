@@ -33,7 +33,8 @@ const Header = () => {
         "right-0",
         "z-50",
         "shadow-md",
-        "bg-white"
+        "bg-white",
+        "pb-2"
       );
     } else {
       headerRef.current.classList.remove(
@@ -43,7 +44,8 @@ const Header = () => {
         "right-0",
         "z-50",
         "shadow-md",
-        "bg-white"
+        "bg-white",
+        "pb-2"
       );
     }
     return () => {

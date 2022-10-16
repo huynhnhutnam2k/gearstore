@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "pages/Home";
 import Login from "pages/Login";
 import Register from "pages/Register";
@@ -8,11 +8,11 @@ import Detail from "pages/Detail";
 import ErrorPage from "pages/ErrorPage";
 import Product from "pages/Product";
 import Cart from "pages/Cart";
-import Checkout from "pages/Checkout";
-import Payment from "pages/Payment";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsMobile } from "app/stateDevide";
 import { PHONE_BREAKPOINT, TABLET_BREAKPOINT } from "constant/breakpoint";
+import ThankYou from "pages/ThankYou";
+import Chat from "pages/Chat";
 function App() {
   const [width, setWidth] = useState(undefined);
   const dispatch = useDispatch();
@@ -58,8 +58,8 @@ function App() {
         <Route path="/products" element={<Product />} />
         <Route path="/products/:id" element={<Detail />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/payment" element={<Payment />} />
-        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/thanks" element={<ThankYou />} />
+        <Route path="/chat" element={<Chat />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </div>

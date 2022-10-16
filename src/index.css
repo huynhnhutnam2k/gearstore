@@ -3,114 +3,253 @@
 @tailwind utilities;
 
 @layer components {
-    .product {
-        @apply flex flex-col rounded-md shadow-xl relative w-[100%] overflow-hidden
-    }
-    .product-image{
-        @apply w-full h-4/5 flex overflow-x-hidden duration-200 
-    }
-    .product-image img {
-        @apply min-w-full h-full object-cover duration-75 object-center
-    }
-    .product:hover .product-image img:nth-child(1){
-        @apply -translate-x-full
-    }
-    .product:hover .product-image img:nth-child(2){
-        @apply -translate-x-full
-    }
-    .product-effect{ 
-        @apply absolute top-2 left-[200px] w-full h-full gap-y-2 flex flex-col opacity-0 z-20 duration-500
-    }
-    .product-effect-item{
-        @apply flex w-10 h-10 items-center justify-center bg-white rounded-full text-black cursor-pointer z-20 duration-500
-    }
-    .product:hover .product-effect{
-        @apply left-[20px] opacity-100
-    }
-    .product-surface {
-        @apply w-full h-[80%] bg-transparent absolute -z-10 duration-500 delay-150
-    }
-    .product:hover .product-surface{
-        background-color: rgba(0,0,0,0.24);
-        z-index: 10;
-    }
-    .product-link{
-        @apply w-full h-full flex justify-center items-center cursor-pointer duration-500 border border-white text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 opacity-0 
-    }
-    .product:hover .product-link{
-        @apply opacity-100 visible
-    }
-    /* .product-full{
+  .container {
+    @apply w-[1366px] mx-auto relative px-[20px];
+  }
+  .product {
+    @apply flex flex-col rounded-md shadow-xl relative w-[100%] overflow-hidden;
+  }
+  .product-image {
+    @apply w-full h-4/5 flex overflow-x-hidden duration-200;
+  }
+  .product-image img {
+    @apply min-w-full h-full object-cover duration-75 object-center;
+  }
+  .product:hover .product-image img:nth-child(1) {
+    @apply -translate-x-full;
+  }
+  .product:hover .product-image img:nth-child(2) {
+    @apply -translate-x-full;
+  }
+  .product-effect {
+    @apply absolute top-2 left-[200px] w-full h-full gap-y-2 flex flex-col opacity-0 z-20 duration-500;
+  }
+  .product-effect-item {
+    @apply flex w-10 h-10 items-center justify-center bg-white rounded-full text-black cursor-pointer z-20 duration-500;
+  }
+  .product:hover .product-effect {
+    @apply left-[20px] opacity-100;
+  }
+  .product-surface {
+    @apply w-full h-[80%] bg-transparent absolute -z-10 duration-500 delay-150;
+  }
+  .product:hover .product-surface {
+    background-color: rgba(0, 0, 0, 0.24);
+    z-index: 10;
+  }
+  .product-link {
+    @apply w-full h-full flex justify-center items-center cursor-pointer duration-500 border border-white text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 opacity-0;
+  }
+  .product:hover .product-link {
+    @apply opacity-100 visible;
+  }
+  /* .product-full{
         transition: all .5s ease-in-out;
     } */
-    .product-icon {
-        /* @apply top-0 -right-10 opacity-0 cursor-pointer */
-        top:0;
-        right: -40px;
-        opacity: 0;
-        cursor: pointer;
-        transition: .5s ease-in-out;
-        /* transition-delay: .2s; */
-    }
-    .product-full:hover .product-icon{
-        @apply opacity-100 top-0 right-5
-    }
-    .product-icon-first{
-        transition-property: transform;
-        transition-delay: .6s, .6s;
-    }
-    .product-icon-second{
-        transition-property: transform;
-
-        transition-delay: .8s, .8s;
-    }
-    .product-icon-first ion-icon, 
-    .product-icon-second ion-icon{
-        pointer-events: none;
-    }
-    /*hamburger menu */
-    #checkbox{
-        @apply hidden
-    }
-    .hamberger{
-        @apply right-1 p-5 flex justify-center items-center cursor-pointer z-50
-    }
-    .line{
-       position: absolute;
-       width: 21px; 
-       height: 2px;
-       background: black;
-       border-radius: 3px;
-       transition: transform .25s , opacity .35s;
-
-    }
-    .line-top{
-        @apply -translate-y-[7px]
-    }
-    .line-bottom{
-        @apply translate-y-[7px]
-    }
-    #checkbox:checked~ .line-top{
-        @apply translate-y-0 rotate-45 
-    }
-    #checkbox:checked~ .line-middle{
-        @apply translate-x-[16px] opacity-0
-    }
-    #checkbox:checked~ .line-bottom{
-        @apply  translate-y-0 -rotate-45
-    }
-
-    /*check profile*/
-    .profile{ 
-        @apply relative
-    }
-    .profile-ul{
-        @apply absolute w-[150px] bg-white shadow-lg rounded px-2 duration-200 top-12 opacity-0 invisible
-    }
-    .profile:hover .profile-ul{
-        @apply opacity-100 visible top-5
-    }
-    .profile ion-icon{
-        pointer-event: none;
-    }
+  .product-icon {
+    /* @apply top-0 -right-10 opacity-0 cursor-pointer */
+    top: 0;
+    right: -40px;
+    opacity: 0;
+    cursor: pointer;
+    transition: 0.5s ease-in-out;
+    /* transition-delay: .2s; */
   }
+  .product-full:hover .product-icon {
+    @apply opacity-100 top-0 right-5;
+  }
+  .product-icon-first {
+    transition-property: transform;
+    transition-delay: 0.6s, 0.6s;
+  }
+  .product-icon-second {
+    transition-property: transform;
+
+    transition-delay: 0.8s, 0.8s;
+  }
+  .product-icon-first ion-icon,
+  .product-icon-second ion-icon {
+    pointer-events: none;
+  }
+  /*hamburger menu */
+  #checkbox {
+    @apply hidden;
+  }
+  .hamberger {
+    @apply right-1 p-5 flex justify-center items-center cursor-pointer z-50;
+  }
+  .line {
+    position: absolute;
+    width: 21px;
+    height: 2px;
+    background: black;
+    border-radius: 3px;
+    transition: transform 0.25s, opacity 0.35s;
+  }
+  .line-top {
+    @apply -translate-y-[7px];
+  }
+  .line-bottom {
+    @apply translate-y-[7px];
+  }
+  #checkbox:checked ~ .line-top {
+    @apply translate-y-0 rotate-45;
+  }
+  #checkbox:checked ~ .line-middle {
+    @apply translate-x-[16px] opacity-0;
+  }
+  #checkbox:checked ~ .line-bottom {
+    @apply translate-y-0 -rotate-45;
+  }
+
+  /*check profile*/
+  .profile {
+    @apply relative;
+  }
+  .profile-ul {
+    @apply absolute w-[150px] bg-white shadow-lg rounded px-2 duration-200 top-12 opacity-0 invisible;
+  }
+  .profile:hover .profile-ul {
+    @apply opacity-100 visible top-5;
+  }
+  .profile ion-icon {
+    pointer-event: none;
+  }
+  .hero-item-poster {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: relative;
+  }
+  .hero-item-poster img {
+    width: 700px;
+    border-radius: 20px;
+    /* box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; */
+    transform: scale(0);
+    transition: 0.7s ease;
+  }
+  .hero-item.active > .hero-item-content > .hero-item-poster > img {
+    transform: scale(1);
+  }
+  .title,
+  .name,
+  .btn,
+  .lorem {
+    @apply opacity-0 -translate-y-[100px] duration-700;
+  }
+  .hero-item.active > .hero-item-content > .hero-item-info > .title {
+    @apply opacity-100 delay-150 translate-y-0;
+  }
+  .hero-item.active > .hero-item-content > .hero-item-info > .name {
+    @apply opacity-100 delay-300 translate-y-0;
+  }
+  .hero-item.active > .hero-item-content > .hero-item-info > .lorem {
+    @apply opacity-100 delay-700 translate-y-0;
+  }
+  .hero-item.active > .hero-item-content > .hero-item-info > .btn {
+    @apply opacity-100 delay-700 translate-y-0;
+  }
+  /* .banner .swiper-slide{
+        width: 100%;
+    } */
+  .promotion:hover .promotion-img {
+    @apply scale-125;
+  }
+
+  .pro {
+    @apply bg-[#fff] duration-300;
+  }
+  .pro:hover {
+    @apply bg-slate-300;
+  }
+  .pro-top img {
+    @apply w-[300px] h-[300px] object-cover duration-200;
+  }
+  .pro-top img:nth-child(2) {
+    @apply hidden;
+  }
+  .pro:hover .pro-top img:nth-child(1) {
+    @apply hidden;
+  }
+  .pro:hover .pro-top img:nth-child(2) {
+    @apply block;
+  }
+  .pro-special {
+    @apply opacity-0;
+  }
+  .pro:hover .pro-special {
+    @apply opacity-100 -translate-y-[70px];
+  }
+
+  .footer-head {
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .footer-menu li a {
+    text-transform: capitalize;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .footer-menu li a:hover {
+    color: var(--red);
+    transform: translateX(10px);
+  }
+
+  /* Checkboox*/
+
+  .group-checkbox {
+    text-align: left;
+  }
+
+  .group-checkbox input {
+    opacity: 0;
+    height: 0;
+    width: 0;
+    cursor: pointer;
+  }
+
+  .group-checkbox label {
+    cursor: pointer;
+    padding-left: 40px;
+    position: relative;
+  }
+
+  .group-checkbox label::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -4px;
+    width: 36px;
+    height: 36px;
+    background-color: white;
+    border: 2px solid #7b7979;
+  }
+
+  .group-checkbox label > ion-icon {
+    position: absolute;
+    left: 8px;
+    top: 4px;
+    color: black;
+    transform: scale(0);
+    font-size: 21px;
+    transition: transform 0.1s ease-in-out;
+  }
+
+  .group-checkbox input:checked + label ion-icon {
+    transform: scale(1);
+  }
+  .rating ion-icon {
+    color: #ffc107;
+    font-size: 22px;
+  }
+  .spc-top {
+    margin-top: 0px;
+  }
+
+  /* .zoom .sc-bdfBwQ {
+    backgo
+  } */
+}

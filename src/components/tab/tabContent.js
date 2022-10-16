@@ -3,6 +3,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { Review } from "components/review";
 const TabContent = ({ description }) => {
   const [value, setValue] = React.useState(0);
 
@@ -10,7 +11,7 @@ const TabContent = ({ description }) => {
     setValue(newValue);
   };
   return (
-    <Box sx={{ width: "100%", fontFamily: "Josefin Sans" }}>
+    <Box sx={{ width: "100%", maxWidth: "1366px", fontFamily: "Josefin Sans" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={value}
@@ -28,7 +29,7 @@ const TabContent = ({ description }) => {
             style={{ fontFamily: "Josefin Sans" }}
           />
           <Tab
-            label="Item Three"
+            label="Review"
             {...a11yProps(2)}
             style={{ fontFamily: "Josefin Sans" }}
           />
@@ -45,7 +46,7 @@ const TabContent = ({ description }) => {
         </div>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <Review></Review>
       </TabPanel>
     </Box>
   );
