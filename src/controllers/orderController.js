@@ -42,7 +42,7 @@ const orderController = {
       res.status(500).json(`Error: ${error}`);
     }
   },
-  getById: async (req, res) => {
+  getByUser: async (req, res) => {
     try {
       const { id } = req.params;
       const order = await Order.find({ user: id });

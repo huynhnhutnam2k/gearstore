@@ -19,7 +19,7 @@ app.use("/user", require("./src/routes/user"));
 app.use("/category", require("./src/routes/category"));
 app.use("/product", require("./src/routes/product"));
 app.use("/order", require("./src/routes/order"));
-
+app.use("/message", require("./src/routes/message"));
 const server = http.createServer(app);
 
 server.listen(port, () => {

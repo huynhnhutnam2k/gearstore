@@ -39,7 +39,7 @@ const productController = {
   },
   get: async (req, res) => {
     try {
-      console.log(req.params);
+      console.log(req.user);
       const id = req.params.id;
       const product = await Product.findOne({ _id: id }).populate(
         "category",
