@@ -4,6 +4,7 @@ const { verifyTokenAdmin, verifyTokenUser } = require("../middlewares/auth");
 router.post("/", verifyTokenAdmin, productController.create);
 router.put("/:id", verifyTokenAdmin, productController.edit);
 router.delete("/:id", verifyTokenAdmin, productController.del);
+router.get("/search/:keyword", productController.search);
 router.get("/:id", productController.get);
 router.get("/", productController.getAll);
 module.exports = router;

@@ -1,4 +1,7 @@
 const Order = require("../models/order");
+const { oAuth2Client } = require("../utils/oAuth2");
+const nodemailer = require("nodemailer");
+const { sendMail } = require("../utils/sendNodemailer");
 const orderController = {
   create: async (req, res) => {
     try {
@@ -27,7 +30,22 @@ const orderController = {
   update: async (req, res) => {
     try {
       const status = req.body.status;
+      const userId = req.body.userId;
       const id = req.params.id;
+      const { email } = await User.findOne({ _id: userId });
+      const accessToken = await oAuth2Client.getAccessToken();
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          type: "OAuth2",
+          user: "namb1809152@student.ctu.edu.vn",
+          clientId: process.env.CLIENT_ID,
+          clientSecret: process.env.CLIENT_SECRET,
+          refreshToken: process.env.REFRESH_TOKEN,
+          accessToken: accessToken,
+        },
+      });
+      const send = await sendMail(transporter, email);
       await Order.findOneAndUpdate({ _id: id }, { $set: { status: status } });
       res.status(200).json("Update success");
     } catch (error) {

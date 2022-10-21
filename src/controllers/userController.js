@@ -49,7 +49,7 @@ const userController = {
         );
         return res.status(200).json({
           _id: user._id,
-          name: user.name,
+          username: user.username,
           email: user.email,
           isAdmin: user.isAdmin,
           token,

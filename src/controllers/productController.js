@@ -39,7 +39,6 @@ const productController = {
   },
   get: async (req, res) => {
     try {
-      console.log(req.user);
       const id = req.params.id;
       const product = await Product.findOne({ _id: id }).populate(
         "category",
@@ -71,6 +70,18 @@ const productController = {
       res.status(200).json(products);
     } catch (err) {
       res.status(500).json(err);
+    }
+  },
+  search: async (req, res) => {
+    try {
+      const keyword = req.params.keyword;
+
+      const products = await Product.find({
+        name: { $regex: ".*" + keyword + ".*" },
+      });
+      res.status(200).json(products);
+    } catch (error) {
+      res.status(500).json(error);
     }
   },
 };
