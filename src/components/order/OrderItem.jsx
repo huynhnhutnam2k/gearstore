@@ -7,6 +7,7 @@ const OrderItem = ({ i }) => {
         <img src={i.image2} alt="" className="w-[200px] h-full object-cover" />
       </div>
       <div className="flex flex-col gap-y-2 justify-center capitalize">
+        <div className="">{i.name}</div>
         <div className="">Quantity: {i.qty}</div>
         <div className="">Price: {i.price}</div>
       </div>

@@ -128,7 +128,7 @@ const Order = () => {
   const { orders } = useSelector((state) => state.order);
   const { userInfo } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  console.log(orders);
+  const { isMobile } = useSelector((state) => state.stateDevide);
   useEffect(() => {
     if (userInfo?._id) {
       dispatch(fetchOrder(userInfo?.email));
@@ -137,7 +137,11 @@ const Order = () => {
   }, []);
   return (
     <NewLayout>
-      <div className="container p-5 min-h-[350px]">
+      <div
+        className={`container ${
+          isMobile ? "py-2 min-h-[500px]" : "p-5"
+        } min-h-[350px]`}
+      >
         <BasicTabs
           pending={orders?.pending}
           completed={orders?.completed}

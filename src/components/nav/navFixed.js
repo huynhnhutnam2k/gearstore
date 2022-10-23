@@ -164,9 +164,23 @@ const NavFixed = () => {
           ))}
         </div>
         {userInfo && (
-          <div className="cursor-pointer" onClick={() => dispatch(logout())}>
-            Logout
-          </div>
+          <>
+            <NavLink
+              to="/order"
+              className="cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                window.scrollTo(0, 0);
+                dispatch(setIsCheckedMenu(false));
+                navigate("order");
+              }}
+            >
+              Your order
+            </NavLink>
+            <div className="cursor-pointer" onClick={() => dispatch(logout())}>
+              Logout
+            </div>
+          </>
         )}
       </div>
     </div>
