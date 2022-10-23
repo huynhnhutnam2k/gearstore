@@ -1,11 +1,12 @@
 import React from "react";
-
 import { Pro } from "components/product";
-import { products } from "constant/testData";
-
-const ProductRender = () => {
+const ProductRender = ({ products, isMobile }) => {
   return (
-    <div className="w-3/4 grid grid-cols-3 gap-2">
+    <div
+      className={`${
+        isMobile ? "w-full grid-cols-2" : "w-3/4 grid-cols-3"
+      } grid gap-2`}
+    >
       {products.map((item) => (
         <Pro item={item}></Pro>
       ))}

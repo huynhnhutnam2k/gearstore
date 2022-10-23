@@ -1,7 +1,7 @@
 import React from "react";
 import KeyBoard from "asset/image/keyboard.png";
 import Mouse from "asset/image/mouse.png";
-import priceFilter from "constant/filterPrice";
+import priceFilter from "constant/filter";
 import { useDispatch, useSelector } from "react-redux";
 import { newFilterPrice } from "components/search/searchSlice";
 const ProductNav = () => {

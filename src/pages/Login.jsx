@@ -4,14 +4,20 @@ import { GoogleIcon } from "components/icons";
 import { Input } from "components/input";
 import { Label } from "components/label";
 import NewLayout from "components/layout/NewLayout";
-import { loginAction } from "features/users/userSlice";
+import { login, loginAction } from "features/users/userSlice";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { JBLQuantum } from "../asset/image/image";
 import * as yup from "yup";
 import { Link } from "react-router-dom";
-
+import {
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  // onAuthStateChanged,
+  signInWithPopup,
+} from "firebase/auth";
+import { auth } from "../firebase/config";
 const schema = yup.object().shape({
   email: yup
     .string()
@@ -32,6 +38,7 @@ const Login = () => {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
+  const { isMobile } = useSelector((state) => state.stateDevide);
   const dispatch = useDispatch();
   useEffect(() => {
     document.title = "Login page";
@@ -43,23 +50,63 @@ const Login = () => {
     };
     dispatch(loginAction(user));
   };
+
+  const signInWithGoogle = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((res) => {
+        // console.log(res);
+        const user = {
+          username: res.user.displayName,
+          email: res.user.email,
+          _id: res.user.uid,
+          token: res.user.accessToken,
+          avatar: res.user.photoURL,
+          providerId: res.providerId,
+        };
+        dispatch(login(user));
+      })
+      .catch((err) => console.log(err));
+  };
+  const signInWithFacebook = () => {
+    const provider = new FacebookAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((res) => {
+        const user = {
+          username: res.user.displayName,
+          email: res.user.email,
+          _id: res.user.uid,
+          token: res.user.accessToken,
+          avatar: res.user.photoURL,
+          providerId: res.providerId,
+        };
+        dispatch(login(user));
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <NewLayout>
       <div className="container">
         <div className="flex gap-x-2">
-          <div className="w-5/12 p-5">
+          <div className={`w-5/12 p-5 ${isMobile ? "hidden" : ""}`}>
             <img src={JBLQuantum} alt="" className="max-w-full" />
           </div>
-          <div className="w-7/12 py-3 px-32 mt-5">
+          <div className={`${isMobile ? "w-full" : "w-7/12"} py-3 px-32 mt-5`}>
             <form action="w-full" onSubmit={handleSubmit(handleLogin)}>
               <div className="text-2xl font-bold text-center uppercase my-2">
                 Login
               </div>
-              <div className="my-2 w-full px-4 py-2 h-12 items-center outline-none border-2 border-[#ccc] rounded cursor-pointer flex justify-center gap-x-2">
+              <div
+                className="my-2 w-full px-4 py-2 h-12 items-center outline-none border-2 border-[#ccc] rounded cursor-pointer flex justify-center gap-x-2"
+                onClick={signInWithGoogle}
+              >
                 <GoogleIcon className="w-10 h-10"></GoogleIcon>
                 <div className="">Sign up with google</div>
               </div>
-              <div className="my-2 w-full px-4 py-2 h-12 items-center outline-none border-2 border-[#ccc] rounded cursor-pointer flex justify-center gap-x-2">
+              <div
+                className="my-2 w-full px-4 py-2 h-12 items-center outline-none border-2 border-[#ccc] rounded cursor-pointer flex justify-center gap-x-2"
+                onClick={signInWithFacebook}
+              >
                 <div className="w-10 h-10 text-blue-500 text-[40px]">
                   <ion-icon name="logo-facebook"></ion-icon>
                 </div>

@@ -22,7 +22,9 @@ a {
   transition: all 0.2s ease-in-out;
   color: #000;
 }
-
+a:hover {
+  color: black;
+}
 figure {
   width: 600px;
   background-repeat: no-repeat;

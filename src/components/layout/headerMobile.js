@@ -7,8 +7,8 @@ const HeaderMobile = () => {
   const { isCheckedMenu } = useSelector((state) => state.stateDevide);
   return (
     <div className="flex justify-between h-[60px] items-center">
-      <div className="w-10 h-10">
-        <img src="/logo.png" alt="" className="w-full h-full object-cover" />
+      <div className="w-10 h-10 flex  items-center text-xl font-bold uppercase">
+        ATShop
       </div>
       <label
         htmlFor="checkbox"
@@ -21,11 +21,11 @@ const HeaderMobile = () => {
           onChange={() => dispatch(setIsCheckedMenu(!isCheckedMenu))}
         />
         <span
-          className={`line line-top ${isCheckedMenu ? "bg-white" : ""}`}
+          className={`line line-top ${isCheckedMenu ? "bg-slate-300" : ""}`}
         ></span>
         <span className="line line-middle"></span>
         <span
-          className={`line line-bottom ${isCheckedMenu ? "bg-white" : ""}`}
+          className={`line line-bottom ${isCheckedMenu ? "bg-slate-300" : ""}`}
         ></span>
       </label>
     </div>

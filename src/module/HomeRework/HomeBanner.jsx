@@ -7,6 +7,7 @@ import {
   JBLJR0310BT1,
 } from "../../asset/image/image";
 import SwiperCore, { Autoplay } from "swiper";
+import { useSelector } from "react-redux";
 const slide = [
   {
     name: "JBL Quantum ONE",
@@ -51,7 +52,7 @@ const HomeBanner = () => {
 };
 
 const HeroSlideItem = ({ item, className }) => {
-  console.log(item.name);
+  const { isMobile } = useSelector((state) => state.stateDevide);
   return (
     <div className={`mt-5 h-full hero-item relative ${className}`}>
       <div className="hero-item-content flex container justify-between items-center ">
@@ -60,7 +61,7 @@ const HeroSlideItem = ({ item, className }) => {
           <div className="capitalize text-3xl font-bold title">
             {item.title}
           </div>
-          <div className="text-lg lorem">
+          <div className={`${isMobile ? "truncate" : ""}text-lg lorem`}>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum
             reiciendis alias suscipit. Repellat quia omnis expedita, sequi quis
             est iusto ex pariatur recusandae! Eveniet cumque officiis fuga

@@ -1,10 +1,17 @@
 import React from "react";
 
-const Loading = ({ width = "40px", height = "40px" }) => {
+const Loading = (props) => {
   return (
     <div
-      className={`w-[${width} h-[${height}] animate-spin border-[5px] border-top-transparent border-blue-400 rounded-[50%]`}
-    ></div>
+      className={`skeleton ${props.className}`}
+      style={{
+        width: props.width || "100%",
+        height: props.height,
+        borderRadius: props.radius,
+      }}
+    >
+      {props.children}
+    </div>
   );
 };
 

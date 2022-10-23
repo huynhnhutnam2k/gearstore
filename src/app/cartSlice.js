@@ -28,8 +28,7 @@ export const cartSlice = createSlice({
     },
     updateCart: (state, action) => {
       state.cart = state.cart.map((item) => {
-        if (item.id === action.payload.id) {
-          // console.log(action.payload);
+        if (item.product === action.payload.product) {
           return action.payload;
         }
         return item;
@@ -38,7 +37,6 @@ export const cartSlice = createSlice({
       state.total = state.cart.reduce((acc, cur) => acc + cur.total, 0);
     },
     clearCart: (state, action) => {
-      // state.cart = [];
       localStorage.removeItem("cartStore");
     },
   },

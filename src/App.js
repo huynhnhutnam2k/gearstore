@@ -13,6 +13,9 @@ import { setIsMobile } from "app/stateDevide";
 import { PHONE_BREAKPOINT, TABLET_BREAKPOINT } from "constant/breakpoint";
 import ThankYou from "pages/ThankYou";
 import Chat from "pages/Chat";
+import Order from "pages/Order";
+import Profile from "pages/Profile";
+import ProductSearch from "pages/ProductSearch";
 function App() {
   const [width, setWidth] = useState(undefined);
   const dispatch = useDispatch();
@@ -23,8 +26,7 @@ function App() {
     };
     window.addEventListener("resize", handleResize);
     handleResize();
-    // console.log(width);
-    if (width >= PHONE_BREAKPOINT) {
+    if (width >= TABLET_BREAKPOINT) {
       dispatch(setIsMobile(false));
     } else {
       dispatch(setIsMobile(true));
@@ -34,14 +36,6 @@ function App() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width]);
-  // const { userInfo } = useSelector((state) => state.user);
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (!userInfo) {
-  //     navigate("/login");
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [dispatch]);
 
   return (
     <div
@@ -58,6 +52,9 @@ function App() {
         <Route path="/products" element={<Product />} />
         <Route path="/products/:id" element={<Detail />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/order" element={<Order />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/search/:search" element={<ProductSearch />} />
         <Route path="/thanks" element={<ThankYou />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="*" element={<ErrorPage />} />

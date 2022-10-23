@@ -1,16 +1,27 @@
+import { getAllProduct } from "app/productSlice";
 import { Pro } from "components/product";
-import { products } from "constant/testData";
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const HomeLatest = () => {
+  const { products } = useSelector((state) => state.product);
+  const { isMobile } = useSelector((state) => state.stateDevide);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllProduct());
+  }, [dispatch]);
   return (
     <div className="my-20 container">
       <div className="text-center text-[50px] font-bold uppercase text-black ">
         LATEST PRODUCT
       </div>
-      <div className="overflow-hidden grid grid-cols-4 gap-2">
-        {products.map((item) => (
+      <div
+        className={`overflow-hidden grid ${
+          isMobile ? "grid-cols-2" : "grid-cols-4"
+        } gap-2`}
+      >
+        {products?.map((item) => (
           <Pro item={item}></Pro>
         ))}
       </div>
