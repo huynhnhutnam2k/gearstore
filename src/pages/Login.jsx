@@ -128,12 +128,20 @@ const Login = () => {
                   control={control}
                 ></Input>
               </Field>
-              <Link
-                to="/register"
-                className="mb-2 inline-block uppercase hover:text-red-800"
-              >
-                You're have no account?
-              </Link>
+              <div className="flex flex-col mb-2">
+                <Link
+                  to="/register"
+                  className=" inline-block uppercase hover:text-red-800"
+                >
+                  You're have no account?
+                </Link>
+                <Link
+                  to="/forgot-password"
+                  className="inline-block uppercase hover:text-red-800"
+                >
+                  Forgot password ?
+                </Link>
+              </div>
               <button
                 type="submit"
                 className="w-full uppercase p-2 flex justify-center items-center border-2 border-black bg-[#000] text-[#fff] hover:bg-[#fff] hover:text-[#000] duration-200"

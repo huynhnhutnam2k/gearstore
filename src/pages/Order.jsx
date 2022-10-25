@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -5,8 +6,10 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import NewLayout from "components/layout/NewLayout";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchOrder } from "app/orderSlice";
+import { fetchOrder, resetState } from "app/orderSlice";
 import OrderLayout from "components/order/OrderLayout";
+import { toast } from "react-toastify";
+import { useRef } from "react";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -125,7 +128,9 @@ function BasicTabs(props) {
   );
 }
 const Order = () => {
-  const { orders } = useSelector((state) => state.order);
+  const { orders, isSuccess, isError, isLoading } = useSelector(
+    (state) => state.order
+  );
   const { userInfo } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const { isMobile } = useSelector((state) => state.stateDevide);
@@ -134,7 +139,24 @@ const Order = () => {
       dispatch(fetchOrder(userInfo?.email));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isSuccess, isError]);
+  const toastId = useRef();
+  useEffect(() => {
+    if (isError && !isLoading) {
+      toast.dismiss(toastId.current);
+      toast.error("Cancel order fail", { containerId: "A" });
+      dispatch(resetState());
+    } else if (isSuccess && !isLoading) {
+      toast.dismiss(toastId.current);
+      toast.success("Cancel order success", { containerId: "A" });
+      dispatch(resetState());
+    } else if (isLoading) {
+      toastId.current = toast.info("Please wait...", {
+        containerId: "A",
+        autoClose: false,
+      });
+    }
+  }, [isError, isSuccess, isLoading]);
   return (
     <NewLayout>
       <div

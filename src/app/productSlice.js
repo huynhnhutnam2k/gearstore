@@ -2,9 +2,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 // const navigate = useNavigate()
-const products = localStorage
-  ? JSON.parse(localStorage.getItem("products"))
-  : [];
+const products =
+  localStorage && localStorage.getItem("products")
+    ? JSON.parse(localStorage.getItem("products"))
+    : [];
 export const productSlice = createSlice({
   name: "product",
   initialState: {
@@ -105,7 +106,7 @@ export const searchProduct = createAsyncThunk(
   async (keyword) => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/product/search/${keyword}`
+        `http://localhost:3001/product/search?keyword=${keyword}`
       );
       localStorage &&
         localStorage.setItem("products", JSON.stringify(res.data));

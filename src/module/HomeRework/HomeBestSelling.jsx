@@ -28,8 +28,8 @@ const HomeBestSelling = () => {
           </div>
         )}
         {!loading &&
-          products.length > 0 &&
-          products.map((item) => <Pro item={item}></Pro>)}
+          products?.length > 0 &&
+          products?.map((item) => <Pro item={item}></Pro>)}
       </div>
     </div>
   );

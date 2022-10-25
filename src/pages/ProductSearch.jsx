@@ -46,8 +46,8 @@ const ProductSearch = () => {
           className={`grid ${isMobile ? "grid-cols-2" : "grid-cols-4"} gap-2`}
         >
           {!isLoading &&
-            products.length > 0 &&
-            products.map((item) => <Pro item={item}></Pro>)}
+            products?.length > 0 &&
+            products?.map((item) => <Pro item={item}></Pro>)}
         </div>
       </div>
     </NewLayout>

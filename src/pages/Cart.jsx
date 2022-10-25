@@ -68,7 +68,13 @@ const Cart = () => {
         },
         totalPrice: +orderItem.reduce((a, b) => a + +b.price * +b.qty, 0),
       };
-      dispatch(addNewOrder({ order, token: userInfo?.token }));
+      dispatch(
+        addNewOrder({
+          order,
+          token: userInfo?.token,
+          providerId: userInfo?.providerId,
+        })
+      );
     },
   });
   const toastId = React.useRef(null);

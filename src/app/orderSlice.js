@@ -11,6 +11,7 @@ export const orderSlice = createSlice({
     orderItem: orderItem,
     addSuccess: false,
     isLoading: false,
+    isSuccess: false,
     isError: false,
     msg: "",
   },
@@ -26,7 +27,6 @@ export const orderSlice = createSlice({
     updateOrderItem: (state, action) => {
       state.orderItem = state.orderItem.map((item) => {
         if (item.product === action.payload.product) {
-          // console.log(action.payload);
           return action.payload;
         }
         return item;
@@ -66,7 +66,7 @@ export const orderSlice = createSlice({
         state.msg = action.payload;
       })
       .addCase(fetchOrder.pending, (state) => {
-        state.isLoading = true;
+        // state.isLoading = true;
       })
       .addCase(fetchOrder.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -75,17 +75,29 @@ export const orderSlice = createSlice({
       .addCase(fetchOrder.rejected, (state) => {
         state.isError = true;
         state.isLoading = false;
+      })
+      .addCase(cancelOrder.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(cancelOrder.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(cancelOrder.rejected, (state) => {
+        state.isError = true;
+        state.isLoading = false;
       });
   },
 });
 export const addNewOrder = createAsyncThunk(
   "order/addNewOrder",
-  async ({ order, token }, { rejectWithValue }) => {
+  async ({ order, token, providerId }, { rejectWithValue }) => {
     try {
       const res = await axios.post("http://localhost:3001/order", order, {
         headers: {
           "Content-Type": "application/json",
           token: `Bearer ${token}`,
+          providerId: providerId,
         },
       });
       console.log(res.data);
@@ -98,12 +110,30 @@ export const addNewOrder = createAsyncThunk(
 
 export const fetchOrder = createAsyncThunk("order/fetchId", async (email) => {
   try {
-    const res = await axios.get(`http://localhost:3001/order/${email}`);
+    const res = await axios.get(`http://localhost:3001/order/email/${email}`);
     return res?.data;
   } catch (error) {
     console.log(error);
   }
 });
+
+export const cancelOrder = createAsyncThunk(
+  "order/cancel",
+  async (id, token, providerId) => {
+    try {
+      const res = await axios.get(`http://localhost:3001/order/cancel/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${token}`,
+          providerId,
+        },
+      });
+      return res?.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 export const {
   addOrder,
   addOrderItem,
