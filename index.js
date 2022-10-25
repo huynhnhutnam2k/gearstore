@@ -6,8 +6,8 @@ const { connect } = require("./src/config/db");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const { oAuth2Client } = require("./src/utils/oAuth2");
-oAuth2Client.setCredentials({ refresh_token: process.env.REFESH_TOKEN });
 dotenv.config();
+oAuth2Client.setCredentials({ refresh_token: process.env.REFESH_TOKEN });
 const port = process.env.PORT || 8080;
 const morgan = require("morgan");
 connect();
@@ -20,6 +20,7 @@ app.use("/user", require("./src/routes/user"));
 app.use("/category", require("./src/routes/category"));
 app.use("/product", require("./src/routes/product"));
 app.use("/order", require("./src/routes/order"));
+app.use("/otp", require("./src/routes/otp"));
 app.use("/message", require("./src/routes/message"));
 const server = http.createServer(app);
 

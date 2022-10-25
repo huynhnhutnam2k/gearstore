@@ -6,7 +6,10 @@ const productController = {
     try {
       //   const { name, price, description, image1, image2, category, countInStock } =
       //     req.body;
-      const newProduct = new Product(req.body);
+      const newProduct = new Product({
+        ...req.body,
+        name: req.body.name.toLowerCase(),
+      });
       const savedProduct = await newProduct.save();
       res.status(200).json(savedProduct);
     } catch (err) {
@@ -74,11 +77,16 @@ const productController = {
   },
   search: async (req, res) => {
     try {
-      const keyword = req.params.keyword;
-
-      const products = await Product.find({
-        name: { $regex: ".*" + keyword + ".*" },
-      });
+      const keyword = req.query.keyword || undefined;
+      console.log(keyword);
+      let products;
+      if (keyword !== undefined) {
+        products = await Product.find({
+          name: { $regex: ".*" + keyword + ".*" },
+        });
+      } else {
+        products = await Product.find();
+      }
       res.status(200).json(products);
     } catch (error) {
       res.status(500).json(error);
