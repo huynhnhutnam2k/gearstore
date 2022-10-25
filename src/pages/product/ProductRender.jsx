@@ -1,14 +1,38 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useProductStore } from "../../store/product-store";
-
+import { useAuthStore } from "../../store/auth-store";
+import { toast } from "react-toastify";
 const ProductRender = () => {
-  const { products, fetch } = useProductStore();
+  const {
+    products,
+    fetch,
+    keyword,
+    setKeyword,
+    searchProduct,
+    deleteAProduct,
+    msg,
+    isSuccess,
+    isError,
+    sort,
+    resetState,
+  } = useProductStore();
+  const { userInfo } = useAuthStore();
   useEffect(() => {
     fetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products]);
+  }, [msg]);
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Delete successfully", { containerId: "A" });
+      resetState();
+    }
+    if (isError) {
+      toast.error("Your request is error", { containerId: "A" });
+      resetState();
+    }
+  }, [isError, isSuccess]);
   return (
     <>
       <div className="p-5">
@@ -22,6 +46,34 @@ const ProductRender = () => {
           >
             Add product
           </Link>
+        </div>
+        <div className="w-full flex justify-end gap-x-2 h-10 items-center relative my-2">
+          <div className="w-[300px] relative h-10">
+            <input
+              type="text"
+              placeholder="Search"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              className="w-full h-full  border-2 border-black text-[#ccc] outline-none text-sm px-2"
+            />
+            <div
+              className="absolute top-1/2 right-1 -translate-y-1/2 h-10 w-10 flex justify-center items-center cursor-pointer text-[#000] text-2xl"
+              onClick={() => searchProduct()}
+            >
+              <ion-icon name="search-circle-outline"></ion-icon>
+            </div>
+          </div>
+          <select
+            name=""
+            id=""
+            onChange={(e) => sort(e.target.value)}
+            className="p-2 border-2 border-black outline-none h-10 text-sm"
+          >
+            <option value="">Sort by</option>
+            <option value="pricedecre">Price decre</option>
+            <option value="priceincre">Price incre</option>
+            <option value="created">Create</option>
+          </select>
         </div>
         <div className="flex flex-col gap-y-3 ">
           {products?.map((item, i) => (
@@ -50,7 +102,10 @@ const ProductRender = () => {
                     >
                       <i className="bx bx-pencil"></i>
                     </Link>
-                    <div className="flex justify-center items-center w-10 h-10 text-white rounded-full bg-slate-400 cursor-pointer">
+                    <div
+                      className="flex justify-center items-center w-10 h-10 text-white rounded-full bg-slate-400 cursor-pointer"
+                      onClick={() => deleteAProduct(item._id, userInfo?.token)}
+                    >
                       <i className="bx bx-x"></i>
                     </div>
                   </div>

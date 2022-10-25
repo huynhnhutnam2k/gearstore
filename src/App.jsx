@@ -13,19 +13,28 @@ const ProductEdit = React.lazy(() => import("./pages/product/ProductEdit"));
 const CategoryRender = React.lazy(() =>
   import("./pages/category/CategoryRender")
 );
+const CategoryAdd = React.lazy(() => import("./pages/category/CategoryAdd"));
+const OrderRender = React.lazy(() => import("./pages/order/OrderRender"));
+const OrderDetail = React.lazy(() => import("./pages/order/OrderDetail"));
+const ChatContent = React.lazy(() => import("./pages/chat/Chat"));
+const LoginPage = React.lazy(() => import("./pages/Login"));
+
 function App() {
   return (
     <BrowserRouter>
       <Suspense fallback={<Loading />}>
         <Routes>
+          <Route path="login" element={<LoginPage />} />
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="category" element={<CategoryRender />} />
+            <Route path="add-category" element={<CategoryAdd />} />
             <Route path="products" element={<ProductRender />} />
             <Route path="add-products" element={<ProductAdd />} />
             <Route path="edit-products/:id" element={<ProductEdit />} />
-            <Route path="customers" element={<Blank />} />
-            <Route path="settings" element={<Blank />} />
+            <Route path="orders" element={<OrderRender />} />
+            <Route path="orders/:id" element={<OrderDetail />} />
+            <Route path="chats" element={<ChatContent />} />
             <Route path="stats" element={<Blank />} />
           </Route>
         </Routes>

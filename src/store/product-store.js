@@ -1,96 +1,19 @@
 import axios from "axios";
 import create from "zustand";
-import {
-  JBLE55BTKEYBLACK1,
-  JBLE55BTKEYBLACK2,
-  JBLHorizon1,
-  JBLHorizon2,
-  JBLJR0310BT1,
-  JBLJR0310BT2,
-  JBLQuantum4001,
-  JBLQuantum4002,
-  JBLTune220TWS1,
-  JBLTune220TWS2,
-  JBLTUNE750BTNC1,
-  JBLTUNE750BTNC2,
-  TS131,
-  TS132,
-  UAProjectRock1,
-  UAProjectRock2,
-} from "../assets/image";
-const initial = [
-  {
-    name: "JBL E55BT KEY BLACK",
-    image1: JBLE55BTKEYBLACK1,
-    image2: JBLE55BTKEYBLACK2,
-    old_price: "400",
-    curr_price: "300",
-  },
-  {
-    name: "Tai nghe Bluetooth True Wireless Mozard TS13 ",
-    image1: TS131,
-    image2: TS132,
-    old_price: "400",
-    curr_price: "300",
-  },
-  {
-    name: "JBL Quatium 400",
-    image1: JBLQuantum4001,
-    image2: JBLQuantum4002,
-    old_price: "400",
-    curr_price: "300",
-  },
-  {
-    name: "JBL JR 310BT",
-    image1: JBLJR0310BT1,
-    image2: JBLJR0310BT2,
-    old_price: "400",
-    curr_price: "300",
-  },
-  {
-    name: "JBL TUNE 750BTNC",
-    image1: JBLTUNE750BTNC1,
-    image2: JBLTUNE750BTNC2,
-    old_price: "400",
-    curr_price: "300",
-  },
-  {
-    name: "JBL Horizon",
-    image1: JBLHorizon1,
-    image2: JBLHorizon2,
-    old_price: "400",
-    curr_price: "300",
-  },
-  {
-    name: "JBL Tune 220TWS",
-    image1: JBLTune220TWS1,
-    image2: JBLTune220TWS2,
-    old_price: "400",
-    curr_price: "300",
-  },
-  {
-    name: "UA Project Rock",
-    image1: UAProjectRock1,
-    image2: UAProjectRock2,
-    old_price: "400",
-    curr_price: "300",
-  },
-];
-
-const initialCate = [
-  {
-    name: "Wireless",
-  },
-  {
-    name: "JBL",
-  },
-];
 export const useProductStore = create((set) => ({
-  products: initial,
+  products: [],
   product: {},
+  keyword: "",
+  msg: "",
   isLoading: false,
+  isSuccess: false,
   isError: false,
-  category: initialCate,
+  setKeyword: (e) => {
+    set(() => ({ keyword: e }));
+  },
+  resetState: () => {
+    set(() => ({ isLoading: false, isError: false, isSuccess: false }));
+  },
   fetch: async () => {
     set(() => ({ isLoading: true }));
     try {
@@ -101,14 +24,93 @@ export const useProductStore = create((set) => ({
       console.log(error);
     }
   },
-  addProduct: async (product) => {
+  searchProduct: async () => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.post("http://localhost:3001/product", product);
-      set(() => ({ isLoading: false, product: res.data }));
+      const keyword = useProductStore.getState().keyword;
+      const res = await axios.get(
+        `http://localhost:3001/product/search/${keyword}`
+      );
+      set(() => ({ isLoading: false, products: res.data }));
+    } catch (error) {
+      set(() => ({ isLoading: false, isError: true }));
+    }
+  },
+  addProduct: async (product, token) => {
+    set(() => ({ isLoading: true }));
+    try {
+      const res = await axios.post("http://localhost:3001/product", product, {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${token}`,
+        },
+      });
+      set(() => ({ isLoading: false, product: res.data, isSuccess: true }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
       console.log(error);
+    }
+  },
+  getAProduct: async (id) => {
+    set(() => ({ isLoading: true }));
+    try {
+      const res = await axios.get(`http://localhost:3001/product/${id}`);
+      set(() => ({ isLoading: false, product: res.data }));
+    } catch (error) {
+      set(() => ({ isLoading: false, isError: true }));
+    }
+  },
+  updateAProduct: async (id, product, token) => {
+    set(() => ({ isLoading: true }));
+    try {
+      const res = await axios.put(
+        `http://localhost:3001/product/${id}`,
+        product,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            token: `Bearer ${token}`,
+          },
+        }
+      );
+      set(() => ({ isLoading: false, msg: res.data }));
+    } catch (error) {
+      set(() => ({ isLoading: false, isError: true }));
+    }
+  },
+  deleteAProduct: async (id, token) => {
+    set(() => ({ isLoading: false }));
+    try {
+      const res = await axios.delete(`http://localhost:3001/product/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${token}`,
+        },
+      });
+      set(() => ({ isLoading: false, msg: res.data }));
+    } catch (error) {
+      set(() => ({ isLoading: false, isError: true }));
+    }
+  },
+  sort: (keyword) => {
+    const { products } = useProductStore.getState();
+    switch (keyword) {
+      case "pricedecre":
+        return set(() => ({
+          products: products.sort((a, b) => a.price - b.price),
+        }));
+      case "priceincre":
+        return set(() => ({
+          products: products.sort((a, b) => b.price - a.price),
+        }));
+      default:
+        return set(() => ({
+          products: products.sort((a, b) => {
+            const i = new Date(a.createdAt);
+            const o = new Date(b.createdAt);
+            return i - o;
+          }),
+        }));
     }
   },
 }));
