@@ -244,9 +244,9 @@
   .rating {
     @apply h-7 flex items-center;
   }
-  .rating ion-icon {
-    color: #ffc300;
-    font-size: 30px;
+  .rating i {
+    color: #ffbd00;
+    font-size: 20px;
   }
   .spc-top {
     margin-top: 0px;

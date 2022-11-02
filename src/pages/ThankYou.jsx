@@ -47,14 +47,16 @@ const ThankYou = () => {
               </div>
             </Fade>
             <Fade bottom effect="fadeInDown">
-              <div className=" text-2xl uppercase ">Thank you so much</div>
+              <div className=" text-2xl uppercase ">
+                Cảm ơn quý khách, hẹn gặp lại
+              </div>
             </Fade>
             <Fade bottom cascade effect="fadeInDown">
               <Link
                 to="/"
                 className=" text-xl uppercase p-2 border-2 border-black bg-[#000] text-[#fff] hover:bg-[#fff] hover:text-[#000] cursor-pointer"
               >
-                Shopping continue
+                Tiếp tục mua sắm
               </Link>
             </Fade>
           </div>

@@ -6,7 +6,9 @@ import stateDevideReducer from "./stateDevide";
 import userReducer from "features/users/userSlice";
 import productReducer from "./productSlice";
 import cartReducer from "./cartSlice";
+import promotionReducer from "./promotionSlice";
 import categoryReducer from "./categorySlice";
+import otpReducer from "./otpSlice";
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
@@ -17,6 +19,8 @@ export const store = configureStore({
     product: productReducer,
     cart: cartReducer,
     category: categoryReducer,
+    promotion: promotionReducer,
+    otp: otpReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

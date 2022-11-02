@@ -51,7 +51,7 @@ const Pro = ({ item }) => {
                     : ""
                 }`}
               >
-                Shop now
+                Xem ngay
               </Link>
               <div
                 className="p-2 border-2 border-[#000] bg-[#000] text-[#fff] hover:text-[#000] hover:bg-[#fff] duration-200 outline-none uppercase cursor-pointer w-[41px] flex justify-center items-center h-[41px]"
@@ -63,12 +63,12 @@ const Pro = ({ item }) => {
           </div>
         ) : (
           <div className="absolute top-5 right-5 w-[50px] h-[50px] flex justify-center items-center rounded-full bg-red-400 text-xs text-white">
-            Sold out
+            Hết hàng
           </div>
         )}
 
         <div className="pro-bottom flex flex-col justify-center items-center h-10">
-          <div className="max-w-[80%] truncate">{item.name}</div>
+          <div className="max-w-[80%] truncate capitalize">{item.name}</div>
           {item.salePercent !== 0 ? (
             <div className="">
               <span className="text-red-400 line-through">{item.price}</span>{" "}

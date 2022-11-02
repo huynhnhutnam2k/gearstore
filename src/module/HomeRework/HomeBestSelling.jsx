@@ -9,7 +9,7 @@ const HomeBestSelling = () => {
   return (
     <div className="my-20 container">
       <div className="text-center text-[50px] font-bold uppercase text-black ">
-        Best selling
+        Sản phẩm bán chạy
       </div>
       <div
         className={`overflow-hidden grid ${

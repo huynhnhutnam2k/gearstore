@@ -5,29 +5,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 const nav = [
   {
-    name: "Home",
+    name: "Trang chủ",
     path: "/",
   },
   {
-    name: "Products",
+    name: "Sản phẩm",
     path: "/products",
   },
   {
-    name: "About",
+    name: "Thông tin",
     path: "/about",
   },
   {
-    name: "Contact",
+    name: "Liên hệ",
     path: "/contact",
   },
 ];
 const miniNav = [
   {
-    name: "Profile",
+    name: "Hồ sơ",
     path: "/profile",
   },
   {
-    name: "Your order",
+    name: "Đơn hàng",
     path: "/order",
   },
 ];
@@ -48,16 +48,21 @@ const NewHeader = () => {
           <div className="">Freeship voi don tren 300k</div>
         </div>
       </div>
-      <div className="container flex justify-between h-[100px] items-center">
+      <div className="container flex justify-between h-[100px] items-center ">
         <Link to="/" className="font-bold text-3xl capitalize">
           ATShop
         </Link>
-        <div className="w-[600px] h-10 relative">
+        <div className="max-w-[600px] h-10 relative flex-1 shrink-0">
           <input
             type="text"
             placeholder="Search"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                handleSearch();
+              }
+            }}
             className="w-full h-full px-2 py-1 bg-slate-300 outline-none "
           />
           <div
@@ -69,11 +74,14 @@ const NewHeader = () => {
         </div>
         <div className="flex gap-x-4 text-xl cursor-pointer items-center">
           {userInfo === null ? (
-            <Link to="/login" className="">
+            <Link
+              to="/login"
+              className="h-10 flex items-center border-2 p-2 border-black"
+            >
               <ion-icon name="person-outline"></ion-icon>
             </Link>
           ) : (
-            <div className="hover-name">
+            <div className="hover-name capitalize p-2 border-2 border-black">
               {userInfo?.username}
               <ul className="hover-name-child">
                 {!userInfo?.providerId ? (
@@ -90,20 +98,23 @@ const NewHeader = () => {
                     className="hover:text-red-300"
                     onClick={(e) => e.preventDefault()}
                   >
-                    <Link to="/order">Your order</Link>
+                    <Link to="/order">Đơn hàng</Link>
                   </li>
                 )}
                 <li
                   className="hover:text-red-300"
                   onClick={() => dispatch(logout())}
                 >
-                  Logout
+                  Đăng xuất
                 </li>
               </ul>
             </div>
           )}
 
-          <Link to="/cart" className="">
+          <Link
+            to="/cart"
+            className="h-10 flex items-center border-2 p-2 border-black"
+          >
             <ion-icon name="cart-outline"></ion-icon>
           </Link>
         </div>

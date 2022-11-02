@@ -10,6 +10,7 @@ export const userSlice = createSlice({
     userInfo: userInfo,
     isLoading: false,
     isError: false,
+    isSuccess: false,
     msg: "",
   },
   reducers: {
@@ -18,6 +19,12 @@ export const userSlice = createSlice({
       localStorage &&
         localStorage.setItem("userInfo", JSON.stringify(action.payload));
       document.location.href = "/";
+    },
+    reset: (state) => {
+      state.isError = false;
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.msg = "";
     },
   },
   extraReducers: (builder) => {
@@ -45,6 +52,43 @@ export const userSlice = createSlice({
       .addCase(logout.rejected, (state) => {
         state.isLoading = false;
         state.isError = true;
+      })
+      .addCase(changeInfo.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(changeInfo.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.msg = action.payload;
+        state.isSuccess = true;
+      })
+      .addCase(changeInfo.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.msg = action.payload;
+      })
+      .addCase(registerPromotion.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(registerPromotion.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(registerPromotion.rejected, (state) => {
+        state.isError = true;
+        state.isLoading = false;
+      })
+      .addCase(register.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        state.isLoading = false;
+        state.msg = action.payload;
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.isError = true;
+        state.msg = action.payload;
+        state.isLoading = false;
       });
   },
 });
@@ -61,6 +105,19 @@ export const loginAction = createAsyncThunk("user/login", async (user) => {
   }
 });
 
+export const register = createAsyncThunk(
+  "user/register",
+  async (user, { rejectWithValue }) => {
+    try {
+      const res = await axios.post("http://localhost:3001/user/register", user);
+      return res?.data;
+    } catch (error) {
+      if (!error.response) throw error;
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const logout = createAsyncThunk("user/logout", async () => {
   try {
     localStorage &&
@@ -72,5 +129,39 @@ export const logout = createAsyncThunk("user/logout", async () => {
   }
 });
 
-export const { login } = userSlice.actions;
+export const changeInfo = createAsyncThunk(
+  "user/changeInfo",
+  async ({ body, token }) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:3001/user/changeInfo`,
+        body,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            token: `Bearer ${token}`,
+          },
+        }
+      );
+      return res?.data;
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  }
+);
+
+export const registerPromotion = createAsyncThunk(
+  "user/registerPromotion",
+  async (email) => {
+    try {
+      const res = await axios.post("http://localhost:3001/user/take", {
+        email,
+      });
+      return res?.data;
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  }
+);
+export const { login, reset } = userSlice.actions;
 export default userSlice.reducer;

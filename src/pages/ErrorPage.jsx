@@ -10,7 +10,7 @@ const ErrorPage = () => {
           alt=""
           className="w-[450px] h-[400px] object-cover"
         />
-        <div className="">Something wrong, please redirect to home page</div>
+        <div className="">Trang này không tồn tại, vui lòng quay lại</div>
       </div>
     </NewLayout>
   );

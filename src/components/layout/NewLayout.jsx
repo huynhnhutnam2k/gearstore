@@ -29,7 +29,8 @@ const NewLayout = ({ children }) => {
         {...toastOption}
       ></ToastContainer>
       {children}
-      <Footer></Footer>
+      {!isMobile && <Footer></Footer>}
+
       <NavFixed></NavFixed>
       {/* {isMobile && isCheckedMenu ? <NavFixed></NavFixed> : null} */}
     </>

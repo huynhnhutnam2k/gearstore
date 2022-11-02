@@ -3,8 +3,10 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { Review } from "components/review";
-const TabContent = ({ description }) => {
+import { Comment, Review } from "components/review";
+import { useSelector } from "react-redux";
+const TabContent = ({ description, reviews }) => {
+  const { userInfo } = useSelector((state) => state.user);
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -29,7 +31,7 @@ const TabContent = ({ description }) => {
             style={{ fontFamily: "Josefin Sans" }}
           />
           <Tab
-            label="Review"
+            label="Đánh giá"
             {...a11yProps(2)}
             style={{ fontFamily: "Josefin Sans" }}
           />
@@ -46,7 +48,17 @@ const TabContent = ({ description }) => {
         </div>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Review></Review>
+        {userInfo?.username ? (
+          <Comment></Comment>
+        ) : (
+          <div className="px-32 ">
+            <div className="p-4 text-center bg-yellow-200 text-black ">
+              Đăng nhập để đánh giá
+            </div>
+          </div>
+        )}
+
+        <Review reviews={reviews}></Review>
       </TabPanel>
     </Box>
   );

@@ -15,7 +15,13 @@ export const productSlice = createSlice({
     isError: false,
     msg: "",
   },
-  reducers: {},
+  reducers: {
+    resetState: (state) => {
+      state.isError = false;
+      state.isLoading = false;
+      state.msg = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllProduct.pending, (state) => {
@@ -32,7 +38,7 @@ export const productSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(getAProduct.pending, (state) => {
-        state.isLoading = true;
+        state.isLoading = false;
       })
       .addCase(getAProduct.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -63,6 +69,17 @@ export const productSlice = createSlice({
       .addCase(searchProduct.rejected, (state) => {
         state.isLoading = false;
         state.isError = true;
+      })
+      .addCase(reviewProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(reviewProduct.fulfilled, (state, action) => {
+        state.msg = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(reviewProduct.rejected, (state) => {
+        state.isError = true;
+        state.isLoading = false;
       });
   },
 });
@@ -117,4 +134,19 @@ export const searchProduct = createAsyncThunk(
     }
   }
 );
+export const reviewProduct = createAsyncThunk(
+  "product/review",
+  async ({ review, id }) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:3001/product/review/" + id,
+        review
+      );
+      return res?.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const { resetState } = productSlice.actions;
 export default productSlice.reducer;

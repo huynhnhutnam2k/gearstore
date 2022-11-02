@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-export const orderItem = localStorage
+export const orderItem = localStorage.getItem("orderItem")
   ? JSON.parse(localStorage.getItem("orderItem"))
   : [];
 export const orderSlice = createSlice({

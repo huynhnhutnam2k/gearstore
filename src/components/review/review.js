@@ -1,39 +1,38 @@
 import { Rating } from "components/rating";
 import React from "react";
-
-const Review = () => {
+import moment from "moment";
+const Review = ({ reviews }) => {
   return (
-    <div className="flex flex-col w-full">
-      <ItemReview></ItemReview>
+    <div className="flex flex-col w-full px-32 gap-y-1">
+      {reviews?.map((review) => (
+        <ItemReview review={review}></ItemReview>
+      ))}
     </div>
   );
 };
 
-const ItemReview = () => {
+const ItemReview = ({ review }) => {
   return (
-    <div className="flex flex-col">
-      <div className="flex gap-5">
-        <div className="font-bold">Name</div>
+    <div className="flex flex-col border-green-400 border-b-2  px-16 py-4 rounded-lg">
+      <div className="flex w-full justify-between h-16 items-center">
+        <div className="flex gap-x-1">
+          <div className="h-16 w-16">
+            <img
+              src={review.avatar}
+              alt=""
+              className="max-h-14 w-14 object-cover rounded-full"
+            />
+          </div>
+          <div className="flex flex-col py-1 justify-center">
+            <div className="font-bold capitalize">{review?.name}</div>
+            <div className="">{moment(review.createdAt).format("llll")}</div>
+          </div>
+        </div>
         <div className="">
-          <Rating value={3}></Rating>
+          <Rating value={review?.rating}></Rating>
         </div>
       </div>
-      <div className="">Comment</div>
-      <div className="flex gap-5">
-        <div className="">
-          <span>
-            <ion-icon name="heart-outline"></ion-icon>
-          </span>
-          Thích
-        </div>
-        <div className="">
-          <span>
-            <ion-icon name="chatbubble-outline"></ion-icon>
-          </span>
-          Thảo luận
-        </div>
-        <div className="">Time</div>
-      </div>
+      <div className="capitalize px-4">{review.comment}</div>
     </div>
   );
 };

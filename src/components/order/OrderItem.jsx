@@ -8,8 +8,8 @@ const OrderItem = ({ i }) => {
       </div>
       <div className="flex flex-col gap-y-2 justify-center capitalize">
         <div className="">{i.name}</div>
-        <div className="">Quantity: {i.qty}</div>
-        <div className="">Price: {i.price}</div>
+        <div className="">Số lượng: {i.qty}</div>
+        <div className="">Đơn giá: {i.price}</div>
       </div>
     </div>
   );

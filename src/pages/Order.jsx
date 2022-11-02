@@ -59,27 +59,27 @@ function BasicTabs(props) {
           centered
         >
           <Tab
-            label="Pending"
+            label="Đang chờ"
             {...a11yProps(0)}
             sx={{ color: "#023047", fontWeight: 700 }}
           />
           <Tab
-            label="Processing"
+            label="Đang xử lý"
             {...a11yProps(1)}
             sx={{ color: "#fb8b24", fontWeight: 700 }}
           />
           <Tab
-            label="shipping"
+            label="Đang vận chuyển"
             {...a11yProps(2)}
             sx={{ color: "#ffd60a", fontWeight: 700 }}
           />
           <Tab
-            label="completed"
+            label="Hoàn tất"
             {...a11yProps(3)}
             sx={{ color: "#8ac926", fontWeight: 700 }}
           />
           <Tab
-            label="cancelled"
+            label="Đã hủy"
             {...a11yProps(4)}
             sx={{ color: "#d00000", fontWeight: 700 }}
           />
@@ -89,21 +89,21 @@ function BasicTabs(props) {
         {pending?.length > 0 ? (
           pending.map((item) => <OrderLayout item={item}></OrderLayout>)
         ) : (
-          <div className="">You have no transactions </div>
+          <div className="">Bạn không có giao dịch nào </div>
         )}
       </TabPanel>
       <TabPanel value={value} index={1}>
         {processing?.length > 0 ? (
           processing.map((item) => <OrderLayout item={item}></OrderLayout>)
         ) : (
-          <div className="">You have no transactions </div>
+          <div className="">Bạn không có giao dịch nào </div>
         )}
       </TabPanel>
       <TabPanel value={value} index={2}>
         {shipping?.length > 0 ? (
           shipping.map((item) => <OrderLayout item={item}></OrderLayout>)
         ) : (
-          <div className="">You have no transactions </div>
+          <div className="">Bạn không có giao dịch nào </div>
         )}
       </TabPanel>
       <TabPanel value={value} index={3}>
@@ -114,14 +114,14 @@ function BasicTabs(props) {
             </>
           ))
         ) : (
-          <div className="">You have no transactions </div>
+          <div className="">Bạn không có giao dịch nào </div>
         )}
       </TabPanel>
       <TabPanel value={value} index={4}>
         {cancelled?.length > 0 ? (
           cancelled.map((item) => <OrderLayout item={item}></OrderLayout>)
         ) : (
-          <div className="">You have no transactions </div>
+          <div className="">Bạn không có giao dịch nào </div>
         )}
       </TabPanel>
     </Box>
@@ -144,14 +144,14 @@ const Order = () => {
   useEffect(() => {
     if (isError && !isLoading) {
       toast.dismiss(toastId.current);
-      toast.error("Cancel order fail", { containerId: "A" });
+      toast.error("Hủy đơn hàng thất bại", { containerId: "A" });
       dispatch(resetState());
     } else if (isSuccess && !isLoading) {
       toast.dismiss(toastId.current);
-      toast.success("Cancel order success", { containerId: "A" });
+      toast.success("Hủy đơn hàng thành công", { containerId: "A" });
       dispatch(resetState());
     } else if (isLoading) {
-      toastId.current = toast.info("Please wait...", {
+      toastId.current = toast.info("Đang xử lý...", {
         containerId: "A",
         autoClose: false,
       });

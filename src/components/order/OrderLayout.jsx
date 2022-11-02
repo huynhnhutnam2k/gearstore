@@ -17,15 +17,16 @@ const OrderLayout = ({ item }) => {
       <div className="flex items-center gap-x-2">
         <div className="flex flex-col gap-y-2 p-2">
           <div className="">
-            Order at {moment(item.createdAt).startOf("hour").fromNow()}
+            Thời gian đặt hàng :{" "}
+            {moment(item.createdAt).startOf("hour").fromNow()}
           </div>
           <div className="">
-            Shipping Address: {item.shippingAddress.city},{" "}
+            Địa chỉ giao hàng : {item.shippingAddress.city},{" "}
             {item.shippingAddress.districts}, {item.shippingAddress.ward},{" "}
             {item.shippingAddress.address}
           </div>
-          <div className="">Status: {item.status}</div>
-          <div className="">Total: {item.totalPrice}</div>
+          <div className="">Trạng thái đơn hàng : {item.status}</div>
+          <div className="">Tổng cộng : {item.totalPrice}</div>
         </div>
         {item.status === "pending" || item.status === "processing" ? (
           <div
@@ -36,7 +37,7 @@ const OrderLayout = ({ item }) => {
               )
             }
           >
-            Cancel Order
+            Hủy đơn hàng
           </div>
         ) : null}
       </div>

@@ -21,7 +21,7 @@ const ProductSearch = () => {
             to="/search"
             className="hover:text-red-800 uppercase duration-150"
           >
-            Search
+            Từ khóa tìm kiếm
           </Link>
           <div className="">
             <ion-icon name="play-forward-outline"></ion-icon>

@@ -94,14 +94,14 @@ const Login = () => {
           <div className={`${isMobile ? "w-full" : "w-7/12"} py-3 px-32 mt-5`}>
             <form action="w-full" onSubmit={handleSubmit(handleLogin)}>
               <div className="text-2xl font-bold text-center uppercase my-2">
-                Login
+                Đăng nhập
               </div>
               <div
                 className="my-2 w-full px-4 py-2 h-12 items-center outline-none border-2 border-[#ccc] rounded cursor-pointer flex justify-center gap-x-2"
                 onClick={signInWithGoogle}
               >
                 <GoogleIcon className="w-10 h-10"></GoogleIcon>
-                <div className="">Sign up with google</div>
+                <div className="">Đăng nhập với google</div>
               </div>
               <div
                 className="my-2 w-full px-4 py-2 h-12 items-center outline-none border-2 border-[#ccc] rounded cursor-pointer flex justify-center gap-x-2"
@@ -110,7 +110,7 @@ const Login = () => {
                 <div className="w-10 h-10 text-blue-500 text-[40px]">
                   <ion-icon name="logo-facebook"></ion-icon>
                 </div>
-                <div className="">Sign up with facebook</div>
+                <div className="">Đăng nhập với facebook</div>
               </div>
               <Field>
                 <Label htmlFor="email">Email</Label>
@@ -121,7 +121,7 @@ const Login = () => {
                 ></Input>
               </Field>
               <Field>
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Mật khẩu</Label>
                 <Input
                   name="password"
                   placeholder="Enter your password"
@@ -133,20 +133,20 @@ const Login = () => {
                   to="/register"
                   className=" inline-block uppercase hover:text-red-800"
                 >
-                  You're have no account?
+                  Bạn chưa có tài khoản?
                 </Link>
                 <Link
                   to="/forgot-password"
                   className="inline-block uppercase hover:text-red-800"
                 >
-                  Forgot password ?
+                  Quên mật khẩu
                 </Link>
               </div>
               <button
                 type="submit"
                 className="w-full uppercase p-2 flex justify-center items-center border-2 border-black bg-[#000] text-[#fff] hover:bg-[#fff] hover:text-[#000] duration-200"
               >
-                Login{" "}
+                Đăng nhập{" "}
               </button>
             </form>
           </div>

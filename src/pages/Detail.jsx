@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { NewButton } from "components/button";
 import NewLayout from "components/layout/NewLayout";
 import { Pro } from "components/product";
@@ -8,26 +9,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import ReactImageMagnify from "react-image-magnify";
 import { addOrderItem } from "app/orderSlice";
-import { getAllProduct, getAProduct } from "app/productSlice";
+import { getAllProduct, getAProduct, resetState } from "app/productSlice";
 
 import { toast } from "react-toastify";
+import { useRef } from "react";
 const Detail = () => {
   const location = useLocation();
   const id = location.pathname.split("/")[2];
-  const { product, isLoading, products } = useSelector(
+  const { product, isLoading, products, msg, isError } = useSelector(
     (state) => state.product
   );
   const dispatch = useDispatch();
   useEffect(() => {
     window.scrollTo(0, 0, "smooth");
     dispatch(getAllProduct());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [mainImage, setMainImage] = useState("");
   useEffect(() => {
     dispatch(getAProduct(id));
     product?._id && setMainImage(product.image1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   const { isMobile } = useSelector((state) => state.stateDevide);
   const [quantity, setQuantity] = useState(1);
@@ -72,15 +72,33 @@ const Detail = () => {
       product: product._id,
     };
     dispatch(addOrderItem(pro));
-    toast.success("Add successfully", { containerId: "A" });
+    toast.success("Thêm giỏ hàng thành công", { containerId: "A" });
   };
+  const toastId = useRef();
+  useEffect(() => {
+    if (isError && !isLoading) {
+      toast.dismiss(toastId.current);
+      toast.error("Bình luân thất bại", { containerId: "A" });
+      dispatch(resetState());
+    } else if (msg !== "" && !isLoading) {
+      toast.dismiss(toastId.current);
+      toast.success("Bình luận thành công", { containerId: "A" });
+      dispatch(resetState());
+    } else if (isLoading) {
+      toastId.current = toast.info("Đang xử lý...", {
+        containerId: "A",
+        autoClose: false,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [msg, isError, isLoading]);
   return (
     <NewLayout>
       {!isLoading && product?._id && (
         <div className="container">
           <div className="flex p-5 gap-x-3 gap-y-3">
             <Link to="/" className="hover:text-red-800 uppercase duration-150">
-              Home
+              Trang chủ
             </Link>
             <div className="">
               <ion-icon name="play-forward-outline"></ion-icon>
@@ -89,7 +107,7 @@ const Detail = () => {
               to="/products"
               className=" hover:text-red-800 uppercase duration-150"
             >
-              Products
+              Sản phẩm
             </Link>
             <div className="">
               <ion-icon name="play-forward-outline"></ion-icon>
@@ -118,9 +136,10 @@ const Detail = () => {
                         isFluidWidth: true,
                       },
                       largeImage: {
-                        src: product.image2,
-                        width: 600,
-                        height: 600,
+                        src: product.image1,
+                        width: 900,
+                        height: 900,
+                        isFluidWidth: true,
                       },
                       enlargedImageContainerStyle: {
                         background: "#fff",
@@ -156,8 +175,8 @@ const Detail = () => {
                 isMobile ? "" : "w-7/12"
               } flex flex-col gap-y-5 py-5 text-lg`}
             >
-              <div className="text-2xl font-bold">{product.name}</div>
-              <div className="">Brand: JBL</div>
+              <div className="text-2xl font-bold uppercase">{product.name}</div>
+              <div className="">Thể loại: {product.category.name}</div>
               <div className="flex gap-x-3">
                 <div className="">Rating: </div>
                 <Rating value={product.rating}></Rating>
@@ -192,34 +211,49 @@ const Detail = () => {
                 </div>
               </div>
               <NewButton
-                className="w-[150px] p-3"
-                text="Add to cart"
+                className="w-[216px] p-3"
+                text="Thêm vào giỏ hàng"
                 onClick={handleAddOrderItem}
               ></NewButton>
             </div>
           </div>
           <div className="container">
-            <TabContent description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet, consectetur porro expedita, praesentium ipsum illo tempore ipsa eum earum, voluptatem inventore possimus sit vitae? Cupiditate itaque molestias fugiat consectetur repellat!"></TabContent>
+            <TabContent
+              description={product.description}
+              reviews={product.reviews}
+            ></TabContent>
           </div>
           <div className="my-5">
             <div className="text-2xl font-bold uppercase text-center">
-              Related Product
+              sản phẩm liên quan
             </div>
-            <div
-              className={`grid ${
-                isMobile ? "grid-cols-2" : "grid-cols-4"
-              } gap-2`}
-            >
-              {products
-                .filter(
-                  (item) =>
-                    item.category._id === product?.category._id &&
-                    item._id !== product._id
-                )
-                .map((item) => (
-                  <Pro item={item}></Pro>
-                ))}
-            </div>
+            {products.filter(
+              (item) =>
+                item.category._id === product?.category._id &&
+                item._id !== product._id
+            ).length === 0 ? (
+              <div className="px-32 mt-2">
+                <div className="p-4 bg-yellow-200 text-center text-sm uppercase">
+                  Không có sản phẩm liên quan
+                </div>
+              </div>
+            ) : (
+              <div
+                className={`grid ${
+                  isMobile ? "grid-cols-2" : "grid-cols-4"
+                } gap-2`}
+              >
+                {products
+                  .filter(
+                    (item) =>
+                      item.category._id === product?.category._id &&
+                      item._id !== product._id
+                  )
+                  .map((item) => (
+                    <Pro item={item}></Pro>
+                  ))}
+              </div>
+            )}
           </div>
         </div>
       )}

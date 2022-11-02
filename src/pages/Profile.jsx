@@ -1,11 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import NewLayout from "components/layout/NewLayout";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import { useFormik } from "formik";
+import { changeInfo, reset } from "features/users/userSlice";
+import { toast } from "react-toastify";
 const Profile = () => {
   const { userInfo } = useSelector((state) => state.user);
   const { isMobile } = useSelector((state) => state.stateDevide);
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       email: userInfo?.email,
@@ -15,15 +19,34 @@ const Profile = () => {
     },
     enableReinitialize: true,
     onSubmit: (values) => {
-      console.log(values);
+      dispatch(changeInfo({ body: values, token: userInfo?.token }));
     },
   });
   useEffect(() => {
     if (!userInfo) {
       <Navigate to="/"></Navigate>;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const toastId = useRef(null);
+  const { isError, isLoading, msg, isSuccess } = useSelector(
+    (state) => state.user
+  );
+  useEffect(() => {
+    if (isError) {
+      toast.dismiss(toastId.current);
+      toast.error("Current password is incorrect", { containerId: "A" });
+      dispatch(reset());
+    } else if (isSuccess) {
+      toast.dismiss(toastId.current);
+      toast.success(msg, { containerId: "A" });
+      dispatch(reset());
+    } else if (isLoading) {
+      toastId.current = toast.info("Please wait...", {
+        containerId: "A",
+        autoClose: false,
+      });
+    }
+  }, [isError, isLoading, isSuccess, msg]);
   return (
     <NewLayout>
       <div className={`container ${isMobile ? "" : "p-5"}`}>
@@ -47,11 +70,11 @@ const Profile = () => {
               <div className="">{userInfo?.createdAt}</div>
             </div>
             <div className="w-full bg-green-200 uppercase p-2">
-              PROFILE SETTINGS
+              cài đặt hồ sơ
             </div>
-            <div className="rounded-br-[8px] rounded-bl-[8px] p-2 w-full">
+            <div className="rounded-br-[8px] rounded-bl-[8px] p-2 w-full uppercase">
               <Link to="/order" className="">
-                ORDER LIST
+                Danh sách đơn hàng
               </Link>
             </div>
             <div className="absolute top-[70px] left-10">
@@ -66,7 +89,7 @@ const Profile = () => {
             <div className={`${isMobile ? "" : "w-8/12"} p-2`}>
               <div className="flex gap-x-2">
                 <div className="flex flex-col w-1/2">
-                  <label htmlFor="">Username</label>
+                  <label htmlFor="">Tên người dùng</label>
                   <input
                     type="text"
                     value={formik.values.username}
@@ -80,17 +103,17 @@ const Profile = () => {
                   <input
                     type="text"
                     value={formik.values.email}
-                    onChange={formik.handleChange}
+                    // onChange={formik.handleChange}
                     name="email"
-                    className="w-full p-2 border-2 border-black text-[#ccc] outline-none text-[16px]"
+                    className="w-full p-2 border-2 border-black text-[#ccc] outline-none text-[16px] bg-slate-100"
                   />
                 </div>
               </div>
               <div className="flex gap-x-2 mt-4">
                 <div className="flex flex-col w-1/2">
-                  <label htmlFor="">Current Password</label>
+                  <label htmlFor="">Mật khẩu hiện tại</label>
                   <input
-                    type="text"
+                    type="password"
                     value={formik.values.currentPassword}
                     onChange={formik.handleChange}
                     name="currentPassword"
@@ -98,9 +121,9 @@ const Profile = () => {
                   />
                 </div>
                 <div className="flex flex-col w-1/2">
-                  <label htmlFor="">New Password</label>
+                  <label htmlFor="">Mật khẩu mới</label>
                   <input
-                    type="text"
+                    type="password"
                     value={formik.values.newPassword}
                     onChange={formik.handleChange}
                     name="newPassword"
@@ -109,10 +132,10 @@ const Profile = () => {
                 </div>
               </div>
               <div
-                className="w-full p-2 text-[#fff] bg-[#000] hover:text-[#000] cursor-pointer hover:bg-[#fff] duration-200 border-2 border-black flex justify-center mt-4"
+                className="w-full p-2 text-[#fff] uppercase bg-[#000] hover:text-[#000] cursor-pointer hover:bg-[#fff] duration-200 border-2 border-black flex justify-center mt-4"
                 onClick={formik.handleSubmit}
               >
-                Update
+                Cập nhật
               </div>
             </div>
           )}

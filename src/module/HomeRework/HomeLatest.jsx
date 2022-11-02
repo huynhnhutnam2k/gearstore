@@ -14,7 +14,7 @@ const HomeLatest = () => {
   return (
     <div className="my-20 container">
       <div className="text-center text-[50px] font-bold uppercase text-black ">
-        LATEST PRODUCT
+        Sản phẩm mới nhất
       </div>
       <div
         className={`overflow-hidden grid ${
@@ -29,7 +29,7 @@ const HomeLatest = () => {
         to="/products"
         className="mx-auto text-center block my-4 uppercase w-[120px] p-2 border-2 border-black bg-[#000] text-[#fff] hover:bg-[#fff] hover:text-[#000] duration-200"
       >
-        View all
+        Xem thêm
       </Link>
     </div>
   );

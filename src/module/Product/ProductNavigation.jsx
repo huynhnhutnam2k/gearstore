@@ -39,10 +39,10 @@ const ProductNavigation = (props) => {
             className="w-[120px]  bg-[#000] text-[#fff] border-2 border-black hover:text-[#000] hover:bg-[#fff] duration-200 uppercase p-2 text-center mb-2 cursor-pointer"
             onClick={() => setShowNav(false)}
           >
-            close
+            Đóng
           </div>
         )}
-        <div className="text-xl mb-3 font-bold">Categories</div>
+        <div className="text-xl mb-3 font-bold">Danh mục </div>
         <ul className="flex flex-col gap-y-2 text-lg cursor-pointer">
           <li
             className={`${category === "" ? "text-blue-500" : ""}`}
@@ -61,17 +61,17 @@ const ProductNavigation = (props) => {
         </ul>
       </div>
       <div className="">
-        <div className="text-xl mb-3 font-bold">Price</div>
+        <div className="text-xl mb-3 font-bold">Giá</div>
         <div className="flex">
           <input
-            type="text"
+            type="number"
             className="w-1/3 border-2 border-black p-1 outline-none"
             value={minVal}
             onChange={(e) => setMinVal(+e.target.value)}
           />
           <div className="w-10 h-10 flex justify-center items-center">---</div>
           <input
-            type="text"
+            type="number"
             className="w-1/3 border-2 border-black p-1 outline-none"
             value={maxVal}
             onChange={(e) => setMaxVal(+e.target.value)}
@@ -103,7 +103,7 @@ const ProductNavigation = (props) => {
         </div>
       </div>
       <div className="">
-        <div className="text-xl font-bold ">Rating</div>
+        <div className="text-xl font-bold ">Rate</div>
         <div className="flex flex-col gap-y-3">
           {rating.map((item) => (
             <div class="group-checkbox mt-3 mb-2">

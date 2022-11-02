@@ -43,7 +43,7 @@ const Product = () => {
       <div className="container">
         <div className="flex p-5 gap-x-3 gap-y-3">
           <Link to="/" className="hover:text-red-800 uppercase duration-150">
-            Home
+            Trang chủ
           </Link>
           <div className="">
             <ion-icon name="play-forward-outline"></ion-icon>
@@ -52,7 +52,7 @@ const Product = () => {
             to="/products"
             className=" hover:text-red-800 uppercase duration-150"
           >
-            All Products
+            Sản phẩm
           </Link>
         </div>
         <div className={` flex gap-x-2 ${isMobile ? "flex-col" : "p-5"}`}>
@@ -61,7 +61,7 @@ const Product = () => {
               className="w-[120px] bg-[#000] text-[#fff] border-2 border-black mb-4 flex justify-center items-center p-2 uppercase cursor-pointer"
               onClick={() => setShowNav(true)}
             >
-              Filter
+              Lọc
             </div>
           ) : (
             <ProductNavigation
@@ -80,7 +80,6 @@ const Product = () => {
               isMobile={isMobile}
             ></ProductNavigation>
           )}
-
           <ProductRender
             products={listProduct}
             isMobile={isMobile}

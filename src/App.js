@@ -17,6 +17,9 @@ import Order from "pages/Order";
 import Profile from "pages/Profile";
 import ProductSearch from "pages/ProductSearch";
 import ForgotPassword from "pages/ForgotPassword";
+import ConfirmOTP from "pages/ConfirmOTP";
+import ChangePass from "pages/ChangePass";
+
 function App() {
   const [width, setWidth] = useState(undefined);
   const dispatch = useDispatch();
@@ -58,6 +61,8 @@ function App() {
         <Route path="/search/:search" element={<ProductSearch />} />
         <Route path="/thanks" element={<ThankYou />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/confirm" element={<ConfirmOTP />} />
+        <Route path="/changePassword" element={<ChangePass />} />
 
         <Route path="/chat" element={<Chat />} />
         <Route path="*" element={<ErrorPage />} />
