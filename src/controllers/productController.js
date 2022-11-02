@@ -4,8 +4,6 @@ const Category = require("../models/category");
 const productController = {
   create: async (req, res) => {
     try {
-      //   const { name, price, description, image1, image2, category, countInStock } =
-      //     req.body;
       const newProduct = new Product({
         ...req.body,
         name: req.body.name.toLowerCase(),
@@ -56,15 +54,12 @@ const productController = {
     try {
       const { categoryId } = req.query || undefined;
       const limit = req.query.limit || 10;
-      // console.log(req.query);
       let products = [];
       if (categoryId === undefined) {
-        console.log("in");
         products = await Product.find()
           .limit(limit)
           .populate("category", "name");
       } else {
-        console.log("out");
         products = await Product.find({ category: categoryId })
           .limit(limit)
           .populate("category", "name");
@@ -78,7 +73,6 @@ const productController = {
   search: async (req, res) => {
     try {
       const keyword = req.query.keyword || undefined;
-      console.log(keyword);
       let products;
       if (keyword !== undefined) {
         products = await Product.find({
@@ -88,6 +82,30 @@ const productController = {
         products = await Product.find();
       }
       res.status(200).json(products);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+  review: async (req, res) => {
+    try {
+      const { rating, comment, name, user, avatar } = req.body;
+      const product = await Product.findById(req.params.id);
+      if (!product) return res.status(404).json("Product not found");
+      const review = {
+        name,
+        comment,
+        user,
+        avatar,
+        rating: Number(rating),
+      };
+      product.reviews.push(review);
+      product.numReviews = product.reviews.length;
+      product.rating = Math.floor(
+        product.reviews.reduce((a, b) => a + b.rating, 0) /
+          product.reviews.length
+      );
+      await product.save();
+      res.status(200).json("Add review successfully");
     } catch (error) {
       res.status(500).json(error);
     }

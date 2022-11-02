@@ -4,10 +4,11 @@ const reviewSchema = mongoose.Schema(
     name: { type: String, required: true },
     rating: { type: Number, required: true },
     comment: { type: String, required: true },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-
-      ref: "User",
+    user: { type: String, required: true },
+    avatar: {
+      type: String,
+      default:
+        "https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg",
     },
   },
   {

@@ -22,6 +22,7 @@ app.use("/product", require("./src/routes/product"));
 app.use("/order", require("./src/routes/order"));
 app.use("/otp", require("./src/routes/otp"));
 app.use("/message", require("./src/routes/message"));
+app.use("/promotion", require("./src/routes/promotion"));
 const server = http.createServer(app);
 
 server.listen(port, () => {

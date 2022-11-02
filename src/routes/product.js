@@ -5,6 +5,7 @@ router.post("/", verifyTokenAdmin, productController.create);
 router.put("/:id", verifyTokenAdmin, productController.edit);
 router.delete("/:id", verifyTokenAdmin, productController.del);
 router.get("/search", productController.search);
+router.post("/review/:id", productController.review);
 router.get("/:id", productController.get);
 router.get("/", productController.getAll);
 module.exports = router;

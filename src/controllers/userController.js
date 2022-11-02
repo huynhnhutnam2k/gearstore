@@ -2,6 +2,7 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const Otp = require("../models/otp");
+const ListUser = require("../models/listUserRegister");
 const userController = {
   getAll: async (req, res) => {
     try {
@@ -26,9 +27,7 @@ const userController = {
         isAdmin,
       });
       await user.save();
-      return res.status(200).json({
-        message: "User created successfully",
-      });
+      return res.status(200).json("User created successfully");
     } catch (error) {
       res.status(404).json(`Error: ${error.message}`);
     }
@@ -104,6 +103,7 @@ const userController = {
   reset: async (req, res) => {
     try {
       const { email, otp } = req.body;
+      console.log(req.body);
       const otps = await Otp.findOne({ email: email, otp: otp });
       if (otps) {
         const diff = new Date().getTime() - otps.expiresIn;
@@ -112,6 +112,8 @@ const userController = {
         }
         // req.passReset = true;
         res.status(200).json("access");
+      } else {
+        res.status(404).json("OTP is not exist");
       }
     } catch (error) {
       res.status(500).json(error);
@@ -128,6 +130,18 @@ const userController = {
         }
       );
       res.status(200).json(user);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+  takePromotion: async (req, res) => {
+    try {
+      const { email } = req.body;
+      const user = await ListUser.findOne({ email });
+      if (user) return res.status(404).json("User already exist");
+      const newUser = new ListUser({ email });
+      await newUser.save();
+      res.status(200).json("Register successfully");
     } catch (error) {
       res.status(500).json(error);
     }
