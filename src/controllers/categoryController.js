@@ -20,7 +20,7 @@ const categoryController = {
         { products: id },
         { $set: { name: req.body.name } }
       );
-      res.status(200).json("Update successfully");
+      res.status(200).json("Cập nhật thành công");
     } catch (error) {
       res.status(500).json(error);
     }
@@ -32,7 +32,7 @@ const categoryController = {
         { category: req.params.id },
         { $set: { category: null } }
       );
-      res.status(200).json("Delete successfully");
+      res.status(200).json("Xóa thành công");
     } catch (error) {
       res.status(500).json(error);
     }

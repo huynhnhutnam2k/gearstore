@@ -8,6 +8,7 @@ const productController = {
         ...req.body,
         name: req.body.name.toLowerCase(),
       });
+      console.log(newProduct);
       const savedProduct = await newProduct.save();
       res.status(200).json(savedProduct);
     } catch (err) {
@@ -20,7 +21,7 @@ const productController = {
 
       const product = await Product.findOneAndUpdate({ _id: id }, req.body);
 
-      res.status(200).json("Update successfully");
+      res.status(200).json("Cập nhật thành công");
     } catch (err) {
       res.status(500).json(err);
     }
@@ -33,7 +34,7 @@ const productController = {
         { products: id },
         { $pull: { products: id } }
       );
-      res.status(200).json("Delete successfully");
+      res.status(200).json("Xóa thành công");
     } catch (err) {
       res.status(500).json(err);
     }
@@ -90,7 +91,7 @@ const productController = {
     try {
       const { rating, comment, name, user, avatar } = req.body;
       const product = await Product.findById(req.params.id);
-      if (!product) return res.status(404).json("Product not found");
+      if (!product) return res.status(404).json("Sản phẩm không tồn tại");
       const review = {
         name,
         comment,
@@ -105,7 +106,7 @@ const productController = {
           product.reviews.length
       );
       await product.save();
-      res.status(200).json("Add review successfully");
+      res.status(200).json("Thêm đánh giá thành công");
     } catch (error) {
       res.status(500).json(error);
     }

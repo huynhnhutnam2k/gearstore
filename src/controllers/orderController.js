@@ -26,7 +26,7 @@ const orderController = {
         result.push(order.toString());
       }
       if (result.indexOf("false") !== -1) {
-        res.status(500).json("Quantity not enougt in stock");
+        res.status(500).json("Không đủ số lượng trong kho");
       } else {
         const saveOrder = await newOrder.save();
         res.status(200).json(saveOrder);
@@ -38,13 +38,13 @@ const orderController = {
   configEmail: (status) => {
     switch (status) {
       case "processing":
-        return "Your order has been accepted";
+        return "Đơn hàng của bạn đã được xác nhận";
       case "shipping":
-        return "Your order is being shipped";
+        return "Đơn hàng của bạn đang được vận chuyển";
       case "completed":
-        return "Your order is being completed";
+        return "Đơn hàng của bạn đã hoàn tất";
       default:
-        return "Your order has been cancelled";
+        return "Bạn đã hủy đơn hàng ";
     }
   },
   update: async (req, res) => {
@@ -66,7 +66,7 @@ const orderController = {
       const mail = orderController.configEmail(status);
       const send = await sendMail(transporter, email, mail);
       await Order.findOneAndUpdate({ _id: id }, { $set: { status: status } });
-      res.status(200).json("Update success");
+      res.status(200).json("Cập nhật thành công");
     } catch (error) {
       res.status(500).json(`Error: ${error}`);
     }
@@ -118,7 +118,7 @@ const orderController = {
         orderController.increStock(item.product, item.qty);
       }
       order.delete();
-      res.status(200).json("Detele successfully");
+      res.status(200).json("Xóa thành công");
     } catch (error) {
       res.status(500).json(error);
     }
@@ -150,7 +150,7 @@ const orderController = {
       const mail = orderController.configEmail("cancelled");
       const send = await sendMail(transporter, order.user?.email, mail);
       await order.updateOne({ status: "cancelled" });
-      res.status(200).json("Cancel order success");
+      res.status(200).json("Hủy đơn hàng thành công");
     } catch (error) {
       res.status(500).json(error);
     }

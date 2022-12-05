@@ -17,7 +17,7 @@ const userController = {
       const { email, password, username, isAdmin } = req.body;
       const existingUser = await User.findOne({ email });
       if (existingUser) {
-        return res.status(400).send({ message: "User already exists" });
+        return res.status(400).json("Người dùng đã tồn tại");
       }
       const hashPass = await bcrypt.hash(password, 10);
       const user = new User({
@@ -27,7 +27,7 @@ const userController = {
         isAdmin,
       });
       await user.save();
-      return res.status(200).json("User created successfully");
+      return res.status(200).json("Tạo tài khoản thành công");
     } catch (error) {
       res.status(404).json(`Error: ${error.message}`);
     }
@@ -37,9 +37,10 @@ const userController = {
       const { email, password } = req.body;
       const user = await User.findOne({ email });
       if (!user) {
-        return res.status(400).send("User does not exist");
+        return res.status(400).json("Tài khoản không tồn tại");
       }
       const isMatch = await bcrypt.compare(password, user.password);
+      console.log(email, password);
       if (user && isMatch) {
         const token = await jwt.sign(
           { _id: user._id },
@@ -54,9 +55,11 @@ const userController = {
           avatar: user.avatar,
           token,
         });
+      } else {
+        return res.status(404).json("Email hoặc mật khẩu không đúng");
       }
     } catch (error) {
-      res.status(500).json(`Error: ${error.message}`);
+      res.status(500).json(`Error: ${error}`);
     }
   },
   getOne: (req, res) => {
@@ -72,12 +75,13 @@ const userController = {
       const { email, username, currentPassword, newPassword } = req.body;
       const user = await User.findOne({ email: email });
       if (!user) {
-        return res.status(404).json("User not found");
+        return res.status(404).json("Tài khoản không tồn tại");
       }
       const validPassword = await bcrypt.compare(
         currentPassword,
         user.password
       );
+      console.log(req.body);
       if (user && validPassword) {
         const hashPass = await bcrypt.hash(newPassword, 10);
         await user.updateOne(
@@ -89,9 +93,9 @@ const userController = {
           },
           { new: true }
         );
-        res.status(200).json("Update success");
+        res.status(200).json("Cập nhật thành công");
       } else {
-        res.status(404).json("Current password is incorrect");
+        res.status(404).json("Mật khẩu không đúng");
       }
     } catch (error) {
       res.status(500).json(error);
@@ -108,12 +112,12 @@ const userController = {
       if (otps) {
         const diff = new Date().getTime() - otps.expiresIn;
         if (diff < 0) {
-          return res.status(404).json("Otp is expired");
+          return res.status(404).json("Otp hết hạn");
         }
         // req.passReset = true;
         res.status(200).json("access");
       } else {
-        res.status(404).json("OTP is not exist");
+        res.status(404).json("OTP không tồn tại");
       }
     } catch (error) {
       res.status(500).json(error);
@@ -138,10 +142,10 @@ const userController = {
     try {
       const { email } = req.body;
       const user = await ListUser.findOne({ email });
-      if (user) return res.status(404).json("User already exist");
+      if (user) return res.status(404).json("Đã đăng ký ");
       const newUser = new ListUser({ email });
       await newUser.save();
-      res.status(200).json("Register successfully");
+      res.status(200).json("Đăng ký nhận khuyến mãi thành công");
     } catch (error) {
       res.status(500).json(error);
     }

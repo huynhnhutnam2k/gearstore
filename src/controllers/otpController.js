@@ -12,7 +12,7 @@ const otpController = {
       const { email } = req.body;
       const user = await User.findOne({ email: email });
       if (!user) {
-        return res.status(404).json("User not found");
+        return res.status(404).json("Không tìm thấy người dùng");
       }
       const code = makeOTP();
       const otp = await new Otp({

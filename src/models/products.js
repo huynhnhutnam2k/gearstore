@@ -33,17 +33,10 @@ const productSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
     },
-    image1: {
-      type: String,
-      required: true,
-    },
+    image: [{ type: String }],
     salePercent: {
       type: Number,
       default: 0,
-    },
-    image2: {
-      type: String,
-      required: true,
     },
     slug: { type: String, slug: "name" },
     reviews: [reviewSchema],

@@ -43,10 +43,10 @@ const promotionController = {
       const promotion = await Promotion.findOne({ _id: id });
 
       if (!promotion) {
-        return res.status(404).json("Promotion is not exist");
+        return res.status(404).json("Voucher không tồn tại");
       }
       await promotion.updateOne({ $set: req.body });
-      res.status(200).json("Update success");
+      res.status(200).json("Cập nhật thành công");
     } catch (error) {
       res.status(500).json(error);
     }
@@ -55,9 +55,9 @@ const promotionController = {
     try {
       const id = req.params.id;
       const promotion = await Promotion.findById(id);
-      if (!promotion) return res.status(404).json("Promotion is not exist");
+      if (!promotion) return res.status(404).json("Voucher không tồn tại");
       await promotion.delete();
-      res.status(200).json("Delete success");
+      res.status(200).json("Xóa thành công");
     } catch (error) {
       res.status(500).json(error);
     }
@@ -68,7 +68,7 @@ const promotionController = {
       const promotion = await Promotion.findById(id);
       const valid = new Date().getTime() - +promotion.expireIn < 0;
       const response = {
-        ...promotion,
+        ...promotion._doc,
         valid,
       };
       res.status(200).json(response);
@@ -90,7 +90,7 @@ const promotionController = {
       console.log(req.body);
       const promotion = await Promotion.findOne({ code: code.toLowerCase() });
       if (!promotion) {
-        return res.status(404).json("Promotion is not exist");
+        return res.status(404).json("Voucher không tồn tại");
       }
       const valid = new Date().getTime() - +promotion.expireIn < 0;
       const response = {
