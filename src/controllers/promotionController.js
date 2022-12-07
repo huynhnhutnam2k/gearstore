@@ -20,9 +20,11 @@ const promotionController = {
         auth: {
           type: "OAuth2",
           user: "namb1809152@student.ctu.edu.vn",
-          clientId: process.env.CLIENT_ID,
-          clientSecret: process.env.CLIENT_SECRET,
-          refreshToken: process.env.REFESH_TOKEN,
+          clientId:
+            "120544376636-pvjbvfs2omg74v1rqr4dkrjr1uhdi0g9.apps.googleusercontent.com",
+          clientSecret: "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",
+          refreshToken:
+            "1//042q7ifOc1jwoCgYIARAAGAQSNwF-L9Iraj_4sSfpjoxICEhG82x7QP3IQGAEhU1EB-lSxZmGWBEaLGbyGHD3KTKYHz17DgqGhqo",
           accessToken: accessToken,
         },
       });
