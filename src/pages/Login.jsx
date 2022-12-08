@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { yupResolver } from "@hookform/resolvers/yup";
 import Field from "components/field/field";
 import { GoogleIcon } from "components/icons";
@@ -5,7 +6,7 @@ import { Input } from "components/input";
 import { Label } from "components/label";
 import NewLayout from "components/layout/NewLayout";
 import { login, loginAction } from "features/users/userSlice";
-import React, { useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { JBLQuantum } from "../asset/image/image";
@@ -14,7 +15,6 @@ import { Link } from "react-router-dom";
 import {
   GoogleAuthProvider,
   FacebookAuthProvider,
-  // onAuthStateChanged,
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "../firebase/config";
@@ -40,9 +40,7 @@ const Login = () => {
   });
   const { isMobile } = useSelector((state) => state.stateDevide);
   const dispatch = useDispatch();
-  useEffect(() => {
-    document.title = "Login page";
-  }, []);
+  const { msg, isError } = useSelector((state) => state.user);
   const handleLogin = async (values) => {
     const user = {
       email: values.email,
@@ -64,6 +62,7 @@ const Login = () => {
           avatar: res.user.photoURL,
           providerId: res.providerId,
         };
+        // console.log(user);
         dispatch(login(user));
       })
       .catch((err) => console.log(err));
@@ -81,6 +80,7 @@ const Login = () => {
           providerId: res.providerId,
         };
         dispatch(login(user));
+        // console.log(user);
       })
       .catch((err) => console.log(err));
   };
@@ -124,10 +124,19 @@ const Login = () => {
                 <Label htmlFor="password">Mật khẩu</Label>
                 <Input
                   name="password"
+                  type="password"
                   placeholder="Enter your password"
                   control={control}
                 ></Input>
               </Field>
+              {isError && (
+                <div
+                  className="p-2 bg-red-400 text-black text-sm rounded capitalize mb-2
+                "
+                >
+                  {msg}
+                </div>
+              )}
               <div className="flex flex-col mb-2">
                 <Link
                   to="/register"
@@ -143,7 +152,7 @@ const Login = () => {
                 </Link>
               </div>
               <button
-                type="submit"
+                // type="submit"
                 className="w-full uppercase p-2 flex justify-center items-center border-2 border-black bg-[#000] text-[#fff] hover:bg-[#fff] hover:text-[#000] duration-200"
               >
                 Đăng nhập{" "}

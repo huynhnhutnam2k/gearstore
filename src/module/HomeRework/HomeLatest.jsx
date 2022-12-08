@@ -9,7 +9,7 @@ const HomeLatest = () => {
   const { isMobile } = useSelector((state) => state.stateDevide);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllProduct());
+    dispatch(getAllProduct(4));
   }, [dispatch]);
   return (
     <div className="my-20 container">

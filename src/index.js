@@ -5,6 +5,7 @@ import { store } from "./app/store";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
+import MessengerCustomerChat from "react-messenger-customer-chat/lib/MessengerCustomerChat";
 const container = document.getElementById("root");
 const root = createRoot(container);
 
@@ -13,6 +14,7 @@ root.render(
   <Provider store={store}>
     <BrowserRouter>
       <App />
+      <MessengerCustomerChat pageId="110397175235659" appId="573486541213419" />
     </BrowserRouter>
   </Provider>
   // </React.StrictMode>

@@ -19,7 +19,7 @@ import ProductSearch from "pages/ProductSearch";
 import ForgotPassword from "pages/ForgotPassword";
 import ConfirmOTP from "pages/ConfirmOTP";
 import ChangePass from "pages/ChangePass";
-
+// import MessengerCustomerChat from "react-messenger-customer-chat";
 function App() {
   const [width, setWidth] = useState(undefined);
   const dispatch = useDispatch();
@@ -40,7 +40,6 @@ function App() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width]);
-
   return (
     <div
       className={`w-full overflow-x-hidden ${
@@ -63,7 +62,6 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/confirm" element={<ConfirmOTP />} />
         <Route path="/changePassword" element={<ChangePass />} />
-
         <Route path="/chat" element={<Chat />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>

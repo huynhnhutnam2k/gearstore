@@ -6,8 +6,12 @@ import HomePromotion from "module/HomeRework/HomePromotion";
 import React from "react";
 import HomeBestSelling from "module/HomeRework/HomeBestSelling";
 import HomeLatestBlog from "module/HomeRework/HomeLatestBlog";
+import { useEffect } from "react";
 
 const Home = () => {
+  useEffect(() => {
+    document.title = "Trang chủ";
+  }, []);
   return (
     <NewLayout>
       <HomeBanner></HomeBanner>

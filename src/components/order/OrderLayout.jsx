@@ -26,7 +26,13 @@ const OrderLayout = ({ item }) => {
             {item.shippingAddress.address}
           </div>
           <div className="">Trạng thái đơn hàng : {item.status}</div>
-          <div className="">Tổng cộng : {item.totalPrice}</div>
+          <div className="">
+            Tổng cộng :{" "}
+            {new Intl.NumberFormat("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            }).format(item.totalPrice)}
+          </div>
         </div>
         {item.status === "pending" || item.status === "processing" ? (
           <div

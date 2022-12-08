@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import data from "constant/data.json";
 import { useState } from "react";
 import {
+  addNewOrder,
   removeAllOrderItem,
   removeOrderItem,
   resetState,
@@ -16,7 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { emailRegExp, phoneRegExp } from "utils/valid";
-import { getPromotion } from "app/promotionSlice";
+import { getPromotion, resetPromtion } from "app/promotionSlice";
 const Cart = () => {
   const { orderItem } = useSelector((state) => state.order);
   const [city, setCity] = useState(null);
@@ -47,17 +48,20 @@ const Cart = () => {
     validationSchema: yup.object().shape({
       phone: yup
         .string()
-        .matches(phoneRegExp, "Phone number is not valid")
-        .required("Phone is required"),
-      name: yup.string().required("Name is required"),
+        .matches(phoneRegExp, "Số điện thoại không hợp lệ")
+        .min(10, "Số điện thoại không hợp lệ")
+        .max(11, "Số điện thoại không hợp lệ")
+        .required("Số điện thoại bắt buộc phải có"),
+
+      name: yup.string().required("Tên khách hàng bắt buộc phải có "),
       email: yup
         .string()
-        .matches(emailRegExp, "Email is not valid")
-        .required("Email is required"),
+        .matches(emailRegExp, "Email không hợp lệ")
+        .required("Email bắt buộc phải có"),
       address: yup
         .string()
-        .required("Address is required")
-        .min(6, "Address is too short"),
+        .required("Địa chỉ bắt buộc phải có")
+        .min(6, "Địa chỉ quá ngắn"),
     }),
     enableReinitialize: true,
     onSubmit: (values) => {
@@ -76,33 +80,35 @@ const Cart = () => {
         },
         totalPrice: values.total,
       };
-      console.log(order);
-      // dispatch(
-      //   addNewOrder({
-      //     order,
-      //     token: userInfo?.token,
-      //     providerId: userInfo?.providerId,
-      //   })
-      // );
+      // console.log(order);
+      dispatch(
+        addNewOrder({
+          order,
+          token: userInfo?.token,
+          providerId: userInfo?.providerId,
+        })
+      );
+      dispatch(resetPromtion());
     },
   });
   const toastId = React.useRef(null);
   const navigate = useNavigate();
   useEffect(() => {
+    document.title = "Giỏ hàng";
     if (!isLoading && isError) {
       toast.dismiss(toastId.current);
       toast.error(msg, { containerId: "A" });
       dispatch(resetState());
     } else if (!isLoading && addSuccess) {
       toast.dismiss(toastId.current);
-      toast.success("Order success", { containerId: "A" });
+      toast.success("Đặt hàng thành công", { containerId: "A" });
       setTimeout(() => {
         navigate("/thanks");
         dispatch(removeAllOrderItem());
         dispatch(resetState());
       }, 3000);
     } else if (isLoading) {
-      toastId.current = toast.info("Please wait...", {
+      toastId.current = toast.info("Đang xử lý...", {
         containerId: "A",
       });
     }
@@ -162,9 +168,9 @@ const Cart = () => {
                     <div className="flex justify-between h-full border-b-2 border-b-slate-300">
                       <div className="flex gap-x-5">
                         <img
-                          src={item.image1}
+                          src={item.image && item?.image[0]}
                           alt=""
-                          className="h-full max-w-[200px]"
+                          className="h-[90%] max-w-[200px] object-cover overflow-hidden"
                         />
                         <div className="flex flex-col justify-center gap-y-2">
                           <div className="capitalize">{item.name}</div>
@@ -207,15 +213,28 @@ const Cart = () => {
                       </div>
                       <div className="h-full flex items-center gap-x-2 ">
                         {item.salePercent === 0 ? (
-                          <div className="">${item.price}</div>
+                          <div className="">
+                            {new Intl.NumberFormat("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            }).format(item.price)}
+                          </div>
                         ) : (
                           <div className="flex flex-col">
                             <div className="line-through text-red-400">
-                              {item.price}
+                              {new Intl.NumberFormat("vi-VN", {
+                                style: "currency",
+                                currency: "VND",
+                              }).format(+item.price)}
                             </div>
                             <div className="">
-                              {+item.price -
-                                (+item.price * item.salePercent) / 100}
+                              {new Intl.NumberFormat("vi-VN", {
+                                style: "currency",
+                                currency: "VND",
+                              }).format(
+                                +item.price -
+                                  (+item.price * item.salePercent) / 100
+                              )}
                             </div>
                           </div>
                         )}
@@ -224,7 +243,7 @@ const Cart = () => {
                           className="flex justify-center items-center w-10 h-10 text-white rounded-full bg-slate-400 cursor-pointer"
                           onClick={() => {
                             dispatch(removeOrderItem(item.product));
-                            toast.success("Remove successfully", {
+                            toast.success("Xóa khỏi giỏ hàng thành công", {
                               containerId: "A",
                             });
                           }}
@@ -242,16 +261,21 @@ const Cart = () => {
               >
                 <div className="text-xl">Tạm tính</div>
                 <div className="">
-                  $
-                  {orderItem.reduce((a, b) => {
-                    if (b.salePercent === 0) {
-                      return a + +b.price * +b.qty;
-                    } else {
-                      return (
-                        a + (+b.price - (b.price * b.salePercent) / 100) * b.qty
-                      );
-                    }
-                  }, 0)}
+                  {new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(
+                    orderItem.reduce((a, b) => {
+                      if (b.salePercent === 0) {
+                        return a + +b.price * +b.qty;
+                      } else {
+                        return (
+                          a +
+                          (+b.price - (b.price * b.salePercent) / 100) * b.qty
+                        );
+                      }
+                    }, 0)
+                  )}
                 </div>
               </div>
               <div className="my-5">
@@ -290,13 +314,13 @@ const Cart = () => {
                                 Đơn hàng của bạn sẽ được giảm{" "}
                                 {promotion.percent}%
                               </div>
-                              <div
-                                className={`p-2 flex gap-x-2 h-10 items-center`}
-                              >
-                                <div className="text-lg">Tổng cộng</div>
-                                <div className="text-lg">
-                                  $
-                                  {orderItem.reduce((a, b) => {
+                              <div className="text-sm text-green-500 px-2">
+                                Bạn đã tiết kiệm được{" "}
+                                {new Intl.NumberFormat("vi-VN", {
+                                  style: "currency",
+                                  currency: "VND",
+                                }).format(
+                                  (orderItem.reduce((a, b) => {
                                     if (b.salePercent === 0) {
                                       return a + +b.price * +b.qty;
                                     } else {
@@ -307,8 +331,21 @@ const Cart = () => {
                                           b.qty
                                       );
                                     }
-                                  }, 0) -
-                                    (orderItem.reduce((a, b) => {
+                                  }, 0) *
+                                    promotion.percent) /
+                                    100
+                                )}
+                              </div>
+                              <div
+                                className={`p-2 flex gap-x-2 h-10 items-center`}
+                              >
+                                <div className="text-lg">Tổng cộng</div>
+                                <div className="text-lg">
+                                  {new Intl.NumberFormat("vi-VN", {
+                                    style: "currency",
+                                    currency: "VND",
+                                  }).format(
+                                    orderItem.reduce((a, b) => {
                                       if (b.salePercent === 0) {
                                         return a + +b.price * +b.qty;
                                       } else {
@@ -319,9 +356,22 @@ const Cart = () => {
                                             b.qty
                                         );
                                       }
-                                    }, 0) *
-                                      promotion.percent) /
-                                      100}
+                                    }, 0) -
+                                      (orderItem.reduce((a, b) => {
+                                        if (b.salePercent === 0) {
+                                          return a + +b.price * +b.qty;
+                                        } else {
+                                          return (
+                                            a +
+                                            (+b.price -
+                                              (b.price * b.salePercent) / 100) *
+                                              b.qty
+                                          );
+                                        }
+                                      }, 0) *
+                                        promotion.percent) /
+                                        100
+                                  )}
                                 </div>
                               </div>
                             </>
@@ -335,19 +385,23 @@ const Cart = () => {
                               >
                                 <div className="text-lg">Tổng cộng</div>
                                 <div className="text-lg">
-                                  $
-                                  {orderItem.reduce((a, b) => {
-                                    if (b.salePercent === 0) {
-                                      return a + +b.price * +b.qty;
-                                    } else {
-                                      return (
-                                        a +
-                                        (+b.price -
-                                          (b.price * b.salePercent) / 100) *
-                                          b.qty
-                                      );
-                                    }
-                                  }, 0)}
+                                  {new Intl.NumberFormat("vi-VN", {
+                                    style: "currency",
+                                    currency: "VND",
+                                  }).format(
+                                    orderItem.reduce((a, b) => {
+                                      if (b.salePercent === 0) {
+                                        return a + +b.price * +b.qty;
+                                      } else {
+                                        return (
+                                          a +
+                                          (+b.price -
+                                            (b.price * b.salePercent) / 100) *
+                                            b.qty
+                                        );
+                                      }
+                                    }, 0)
+                                  )}
                                 </div>
                               </div>
                             </>
@@ -362,18 +416,23 @@ const Cart = () => {
                           )}
                           <div className="text-lg">Tổng cộng</div>
                           <div className="text-lg">
-                            $
-                            {orderItem.reduce((a, b) => {
-                              if (b.salePercent === 0) {
-                                return a + +b.price * +b.qty;
-                              } else {
-                                return (
-                                  a +
-                                  (+b.price - (b.price * b.salePercent) / 100) *
-                                    b.qty
-                                );
-                              }
-                            }, 0)}
+                            {new Intl.NumberFormat("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            }).format(
+                              orderItem.reduce((a, b) => {
+                                if (b.salePercent === 0) {
+                                  return a + +b.price * +b.qty;
+                                } else {
+                                  return (
+                                    a +
+                                    (+b.price -
+                                      (b.price * b.salePercent) / 100) *
+                                      b.qty
+                                  );
+                                }
+                              }, 0)
+                            )}
                           </div>
                         </div>
                       )}

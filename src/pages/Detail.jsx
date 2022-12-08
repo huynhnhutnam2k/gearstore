@@ -9,36 +9,42 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import ReactImageMagnify from "react-image-magnify";
 import { addOrderItem } from "app/orderSlice";
-import { getAllProduct, getAProduct, resetState } from "app/productSlice";
+import { getAProduct, getForCategory, resetState } from "app/productSlice";
 
 import { toast } from "react-toastify";
 import { useRef } from "react";
+import { useLayoutEffect } from "react";
 const Detail = () => {
   const location = useLocation();
   const id = location.pathname.split("/")[2];
-  const { product, isLoading, products, msg, isError } = useSelector(
+  const { product, isLoading, products, msg, isError, isSuccess } = useSelector(
     (state) => state.product
   );
   const dispatch = useDispatch();
   useEffect(() => {
     window.scrollTo(0, 0, "smooth");
-    dispatch(getAllProduct());
+    document.title = "Chi tiết sản phẩm";
   }, []);
   const [mainImage, setMainImage] = useState("");
   useEffect(() => {
     dispatch(getAProduct(id));
     product?._id && setMainImage(product.image1);
   }, [id]);
+  useLayoutEffect(() => {
+    product?.category?._id && dispatch(getForCategory(product?.category?._id));
+  }, [product]);
   const { isMobile } = useSelector((state) => state.stateDevide);
   const [quantity, setQuantity] = useState(1);
   const [imageProps, setImageProps] = useState({
     smallImage: {
       alt: "Phasellus laoreet",
       isFluidWidth: true,
-      src: product?.image1,
+      src: product?.image[product.image.length - 1],
+      width: 500,
+      height: 500,
     },
     largeImage: {
-      src: product?.image1,
+      src: product?.image[product.image.length - 1],
       width: 600,
       height: 600,
     },
@@ -50,6 +56,8 @@ const Detail = () => {
         alt: "Phasellus laoreet",
         isFluidWidth: true,
         src: mainImage,
+        width: 500,
+        height: 500,
       },
       largeImage: {
         src: mainImage,
@@ -60,15 +68,14 @@ const Detail = () => {
     };
     setImageProps(prop);
   }, [mainImage]);
-
   const handleAddOrderItem = () => {
     const pro = {
       name: product.name,
       qty: quantity,
-      image1: product.image1,
-      image2: product.image2,
+      image: product.image,
       price: product.price,
       countInStock: product.countInStock,
+      salePercent: product.salePercent,
       product: product._id,
     };
     dispatch(addOrderItem(pro));
@@ -76,7 +83,9 @@ const Detail = () => {
   };
   const toastId = useRef();
   useEffect(() => {
-    if (isError && !isLoading) {
+    if (isSuccess) {
+      toast.dismiss(toastId.current);
+    } else if (isError && !isLoading) {
       toast.dismiss(toastId.current);
       toast.error("Bình luân thất bại", { containerId: "A" });
       dispatch(resetState());
@@ -124,21 +133,26 @@ const Detail = () => {
               <div className="flex justify-center items-center zoom">
                 {isMobile ? (
                   <div className="">
-                    <img src={mainImage || product.image1} alt="" />
+                    <img
+                      src={mainImage || product.image[product.image.length - 1]}
+                      alt=""
+                      className="w-[500px] h-[500px] object-cover"
+                    />
                   </div>
-                ) : mainImage !== product.image1 &&
-                  mainImage !== product.image2 ? (
+                ) : product.image.every((item) => item !== mainImage) ? (
                   <ReactImageMagnify
                     {...{
                       smallImage: {
-                        src: product.image1,
+                        src: product.image[product.image.length - 1],
                         alt: "Phasellus laoreet",
                         isFluidWidth: true,
+                        width: 500,
+                        height: 500,
                       },
                       largeImage: {
-                        src: product.image1,
-                        width: 900,
-                        height: 900,
+                        src: product.image[product.image.length - 1],
+                        width: 600,
+                        height: 600,
                         isFluidWidth: true,
                       },
                       enlargedImageContainerStyle: {
@@ -151,23 +165,23 @@ const Detail = () => {
                   <ReactImageMagnify {...imageProps} />
                 )}
               </div>
-              <div className="flex justify-center items-center ">
-                <div
-                  className="w-[90px] cursor-pointer mx-[10px] border border-[#ccc]"
-                  onClick={() => {
-                    setMainImage(product.image1);
-                  }}
-                >
-                  <img src={product.image1} alt="" className="w-full" />
-                </div>
-                <div
-                  className="w-[90px] cursor-pointer mx-[10px] border border-[#ccc]"
-                  onClick={() => {
-                    setMainImage(product.image2);
-                  }}
-                >
-                  <img src={product.image2} alt="" className="w-full" />
-                </div>
+              <div className="flex justify-center items-center max-w-[500px] overflow-auto">
+                {product.image.map((item) => (
+                  <div
+                    className={`w-[90px] h-[90px] cursor-pointer mx-[10px] border ${
+                      item === mainImage ? "border-red-500" : "border-[#ccc]"
+                    } `}
+                    onClick={() => {
+                      setMainImage(item);
+                    }}
+                  >
+                    <img
+                      src={item}
+                      alt=""
+                      className="w-[90px] h-full object-cover"
+                    />
+                  </div>
+                ))}
               </div>
             </div>
             <div
@@ -188,7 +202,13 @@ const Detail = () => {
                 delectus non reprehenderit ratione necessitatibus aspernatur
                 expedita.
               </div>
-              <div className="text-3xl text-red-800">${product.price}</div>
+
+              <div className="text-3xl text-red-800">
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(product.price)}
+              </div>
               <div className="flex gap-x-2 h-10 items-center ">
                 <div
                   className="w-10 h-full flex justify-center items-center text-lg border-2 border-black p-2 cursor-pointer select-none"
@@ -227,12 +247,8 @@ const Detail = () => {
             <div className="text-2xl font-bold uppercase text-center">
               sản phẩm liên quan
             </div>
-            {products.filter(
-              (item) =>
-                item.category._id === product?.category._id &&
-                item._id !== product._id
-            ).length === 0 ? (
-              <div className="px-32 mt-2">
+            {products?.length === 0 ? (
+              <div className="px-16 mt-2">
                 <div className="p-4 bg-yellow-200 text-center text-sm uppercase">
                   Không có sản phẩm liên quan
                 </div>
@@ -243,15 +259,9 @@ const Detail = () => {
                   isMobile ? "grid-cols-2" : "grid-cols-4"
                 } gap-2`}
               >
-                {products
-                  .filter(
-                    (item) =>
-                      item.category._id === product?.category._id &&
-                      item._id !== product._id
-                  )
-                  .map((item) => (
-                    <Pro item={item}></Pro>
-                  ))}
+                {products?.map((item) => (
+                  <Pro item={item}></Pro>
+                ))}
               </div>
             )}
           </div>

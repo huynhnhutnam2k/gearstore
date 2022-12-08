@@ -72,7 +72,7 @@ const HeroSlideItem = ({ item, className }) => {
             nisi eaque neque placeat esse aperiam cupiditate necessitatibus.
             Nobis accusamus quae repellat suscipit, maiores quod. Exercitationem
           </div>
-          <div className="btn p-2 w-[120px] border-2 border-black uppercase text-white font-bold bg-black duration-200 hover:text-black hover:bg-white">
+          <div className="text-center p-2 w-[120px] border-2 border-black uppercase text-[#fff] font-bold bg-[#000] duration-200 hover:text-[#000] hover:bg-[#fff]">
             Shop now
           </div>
         </div>

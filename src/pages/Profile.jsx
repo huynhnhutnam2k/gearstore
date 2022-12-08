@@ -2,9 +2,9 @@
 import NewLayout from "components/layout/NewLayout";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import { changeInfo, reset } from "features/users/userSlice";
+import { changeInfo, logout, reset } from "features/users/userSlice";
 import { toast } from "react-toastify";
 const Profile = () => {
   const { userInfo } = useSelector((state) => state.user);
@@ -31,17 +31,22 @@ const Profile = () => {
   const { isError, isLoading, msg, isSuccess } = useSelector(
     (state) => state.user
   );
+  const navigate = useNavigate();
   useEffect(() => {
     if (isError) {
       toast.dismiss(toastId.current);
-      toast.error("Current password is incorrect", { containerId: "A" });
+      toast.error("Mật khẩu hiện tại không đúng", { containerId: "A" });
       dispatch(reset());
     } else if (isSuccess) {
       toast.dismiss(toastId.current);
-      toast.success(msg, { containerId: "A" });
+      toast.success("Bạn vui lòng đăng nhập lại để cập nhật thông tin", {
+        containerId: "A",
+      });
       dispatch(reset());
+      dispatch(logout());
+      navigate("/login");
     } else if (isLoading) {
-      toastId.current = toast.info("Please wait...", {
+      toastId.current = toast.info("Đang xử lý...", {
         containerId: "A",
         autoClose: false,
       });

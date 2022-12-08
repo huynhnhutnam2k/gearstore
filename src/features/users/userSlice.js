@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { url } from "app/url";
 const userInfo = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
@@ -11,6 +10,8 @@ export const userSlice = createSlice({
     isLoading: false,
     isError: false,
     isSuccess: false,
+    isRegisterSuccess: false,
+    isRegisterError: false,
     msg: "",
   },
   reducers: {
@@ -26,6 +27,11 @@ export const userSlice = createSlice({
       state.isSuccess = false;
       state.msg = "";
     },
+    resetPromotion: (state) => {
+      state.isRegisterError = false;
+      state.isRegisterSuccess = false;
+      state.isLoading = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -37,9 +43,10 @@ export const userSlice = createSlice({
         state.userInfo = action.payload;
         state.msg = action.payload;
       })
-      .addCase(loginAction.rejected, (state) => {
+      .addCase(loginAction.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        state.msg = action.payload;
       })
       .addCase(logout.pending, (state) => {
         state.isLoading = true;
@@ -71,10 +78,10 @@ export const userSlice = createSlice({
       })
       .addCase(registerPromotion.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
+        state.isRegisterSuccess = true;
       })
       .addCase(registerPromotion.rejected, (state) => {
-        state.isError = true;
+        state.isRegisterError = true;
         state.isLoading = false;
       })
       .addCase(register.pending, (state) => {
@@ -92,24 +99,36 @@ export const userSlice = createSlice({
       });
   },
 });
-export const loginAction = createAsyncThunk("user/login", async (user) => {
-  try {
-    const res = await axios.post(`${url}/user/login`, user);
-    if (res) {
-      localStorage.setItem("userInfo", JSON.stringify(res.data));
-      document.location.href = "/";
-      return res.data;
+export const loginAction = createAsyncThunk(
+  "user/login",
+  async (user, { rejectWithValue }) => {
+    try {
+      const res = await axios.post(
+        `https://gearstorev2.onrender.com/user/login`,
+        user
+      );
+      if (res) {
+        localStorage.setItem("userInfo", JSON.stringify(res.data));
+        document.location.href = "/";
+        return res.data;
+      }
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
     }
-  } catch (error) {
-    console.log(error.response);
   }
-});
+);
 
 export const register = createAsyncThunk(
   "user/register",
   async (user, { rejectWithValue }) => {
     try {
-      const res = await axios.post("http://localhost:3001/user/register", user);
+      const res = await axios.post(
+        "https://gearstorev2.onrender.com/user/register",
+        user
+      );
       return res?.data;
     } catch (error) {
       if (!error.response) throw error;
@@ -118,23 +137,26 @@ export const register = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk("user/logout", async () => {
-  try {
-    localStorage &&
-      JSON.parse(localStorage.getItem("userInfo")) &&
-      localStorage.removeItem("userInfo");
-    document.location.href = "/";
-  } catch (error) {
-    console.log(error);
+export const logout = createAsyncThunk(
+  "https://gearstorev2.onrender.com/user/logout",
+  async () => {
+    try {
+      localStorage &&
+        JSON.parse(localStorage.getItem("userInfo")) &&
+        localStorage.removeItem("userInfo");
+      document.location.href = "/";
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
 export const changeInfo = createAsyncThunk(
   "user/changeInfo",
   async ({ body, token }) => {
     try {
       const res = await axios.put(
-        `http://localhost:3001/user/changeInfo`,
+        `https://gearstorev2.onrender.com/user/changeInfo`,
         body,
         {
           headers: {
@@ -154,14 +176,17 @@ export const registerPromotion = createAsyncThunk(
   "user/registerPromotion",
   async (email) => {
     try {
-      const res = await axios.post("http://localhost:3001/user/take", {
-        email,
-      });
+      const res = await axios.post(
+        "https://gearstorev2.onrender.com/user/take",
+        {
+          email,
+        }
+      );
       return res?.data;
     } catch (error) {
       console.log(error.response.data);
     }
   }
 );
-export const { login, reset } = userSlice.actions;
+export const { login, reset, resetPromotion } = userSlice.actions;
 export default userSlice.reducer;

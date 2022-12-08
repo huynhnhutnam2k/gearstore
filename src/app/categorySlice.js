@@ -29,7 +29,7 @@ export const getAllCategories = createAsyncThunk(
   "categories/getAllCategories",
   async () => {
     try {
-      const res = await axios.get("http://localhost:3001/category");
+      const res = await axios.get("https://gearstorev2.onrender.com/category");
       return res?.data;
     } catch (error) {
       console.log(error);

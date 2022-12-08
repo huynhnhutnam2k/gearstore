@@ -11,6 +11,7 @@ export const otpSlice = createSlice({
     isLoading: false,
     isError: false,
     isSuccess: false,
+    isChangeSuccess: false,
     email: email,
   },
   reducers: {
@@ -46,6 +47,18 @@ export const otpSlice = createSlice({
       .addCase(confirmOTP.rejected, (state) => {
         state.isError = true;
         state.isLoading = false;
+      })
+      .addCase(changePassord.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(changePassord.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        state.isLoading = false;
+        state.isChangeSuccess = true;
+      })
+      .addCase(changePassord.rejected, (state) => {
+        state.isError = true;
+        state.isLoading = false;
       });
   },
 });
@@ -53,7 +66,7 @@ export const forgotPassword = createAsyncThunk(
   "otp/getOTP",
   async (email, { rejectWithValue }) => {
     try {
-      const res = await axios.post("http://localhost:3001/otp", {
+      const res = await axios.post("https://gearstorev2.onrender.com/otp", {
         email: email,
       });
       localStorage && localStorage.setItem("email", email);
@@ -76,13 +89,30 @@ export const confirmOTP = createAsyncThunk(
         email,
         otp,
       };
-      console.log(body);
-      const res = await axios.post("http://localhost:3001/user/reset", body);
+      const res = await axios.post(
+        "https://gearstorev2.onrender.com/user/reset",
+        body
+      );
       return res?.data;
     } catch (error) {
       if (!error.response) {
         throw error;
       }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const changePassord = createAsyncThunk(
+  "otp/changePassword",
+  async (body, { rejectWithValue }) => {
+    try {
+      const res = await axios.put(
+        "https://gearstorev2.onrender.com/user/reset",
+        body
+      );
+      return res.data;
+    } catch (error) {
+      if (!error.response) throw error;
       return rejectWithValue(error.response.data);
     }
   }

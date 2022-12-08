@@ -30,7 +30,7 @@ const ProductNavigation = (props) => {
       className={`${
         isMobile
           ? "w-full p-4 relative bg-white shadow-lg top-[200x] z-10 h-max "
-          : "w-1/4 "
+          : "w-1/4 min-w-[400px]"
       }flex -mt-[15px] flex-col gap-y-3 py-3`}
     >
       <div className="">
@@ -43,16 +43,22 @@ const ProductNavigation = (props) => {
           </div>
         )}
         <div className="text-xl mb-3 font-bold">Danh mục </div>
-        <ul className="flex flex-col gap-y-2 text-lg cursor-pointer">
+        <ul className="flex flex-col text-lg cursor-pointer">
           <li
-            className={`${category === "" ? "text-blue-500" : ""}`}
+            className={`${
+              category === "" ? "text-blue-500 bg-slate-300 p-2 rounded" : "p-2"
+            }`}
             onClick={() => setCategory("")}
           >
             All
           </li>
           {categories?.map((item) => (
             <li
-              className={`${category === item.name ? "text-blue-500" : ""}`}
+              className={`${
+                category === item.name
+                  ? "text-blue-500 bg-slate-300 p-2 rounded"
+                  : "p-2"
+              }`}
               onClick={() => setCategory(item.name)}
             >
               {item.name}
@@ -69,7 +75,7 @@ const ProductNavigation = (props) => {
             value={minVal}
             onChange={(e) => setMinVal(+e.target.value)}
           />
-          <div className="w-10 h-10 flex justify-center items-center">---</div>
+          <div className="w-10 h-10 flex justify-center items-center">--</div>
           <input
             type="number"
             className="w-1/3 border-2 border-black p-1 outline-none"

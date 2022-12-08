@@ -50,6 +50,7 @@ const Register = () => {
   );
   const toastId = useRef(null);
   useEffect(() => {
+    document.title = "Đăng ký";
     if (!isLoading && isError) {
       toast.dismiss(toastId.current);
       toast.error("Đăng ký thất bại", { containerId: "A" });
@@ -69,16 +70,6 @@ const Register = () => {
               <div className="text-2xl font-bold text-center uppercase my-2">
                 Đăng ký
               </div>
-              {/* <div className="my-2 w-full px-4 py-2 h-12 items-center outline-none border-2 border-[#ccc] rounded cursor-pointer flex justify-center gap-x-2">
-                <GoogleIcon className="w-10 h-10"></GoogleIcon>
-                <div className="">Sign up with google</div>
-              </div>
-              <div className="my-2 w-full px-4 py-2 h-12 items-center outline-none border-2 border-[#ccc] rounded cursor-pointer flex justify-center gap-x-2">
-                <div className="w-10 h-10 text-blue-500 text-[40px]">
-                  <ion-icon name="logo-facebook"></ion-icon>
-                </div>
-                <div className="">Sign up with facebook</div>
-              </div> */}
               <Field>
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -99,6 +90,7 @@ const Register = () => {
                 <Label htmlFor="password">Mật khẩu</Label>
                 <Input
                   name="password"
+                  type="password"
                   placeholder="Nhập mật khẩu"
                   control={control}
                 ></Input>

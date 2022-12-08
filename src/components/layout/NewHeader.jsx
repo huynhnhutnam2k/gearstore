@@ -3,6 +3,9 @@ import { logout } from "features/users/userSlice";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+// import SpeechRecognition, {
+//   useSpeechRecognition,
+// } from "react-speech-recognition";
 const nav = [
   {
     name: "Trang chủ",
@@ -34,6 +37,7 @@ const miniNav = [
 const NewHeader = () => {
   const { userInfo } = useSelector((state) => state.user);
   const [keyword, setKeyword] = useState("");
+  // const [voice, setVoice] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleSearch = () => {
@@ -55,7 +59,7 @@ const NewHeader = () => {
         <div className="max-w-[600px] h-10 relative flex-1 shrink-0">
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Tìm kiếm sản phẩm"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onKeyUp={(e) => {
@@ -65,12 +69,36 @@ const NewHeader = () => {
             }}
             className="w-full h-full px-2 py-1 bg-slate-300 outline-none "
           />
+          {/* {browserSupportsSpeechRecognition ? (
+            <>
+              <div className="absolute top-1/2 -translate-y-1/2 right-0 text-xl flex justify-center items-center cursor-pointer">
+                <div
+                  className="w-10 h-10 flex justify-center items-center"
+                  onTouchStart={startListening}
+                  onMouseDown={startListening}
+                  onTouchEnd={SpeechRecognition.stopListening}
+                  onMouseUp={SpeechRecognition.stopListening}
+                >
+                  <ion-icon name="mic-outline"></ion-icon>
+                </div>
+                <div
+                  className="w-10 h-10 flex justify-center items-center"
+                  onClick={handleSearch}
+                >
+                  <ion-icon name="search"></ion-icon>
+                </div>
+              </div>
+            </>
+          ) : ( */}
           <div
-            className="absolute top-1/2 -translate-y-1/2 right-2 text-xl flex justify-center items-center cursor-pointer"
+            className="absolute top-1/2 -translate-y-1/2 right-0 text-xl flex justify-center items-center cursor-pointer"
             onClick={handleSearch}
           >
-            <ion-icon name="search"></ion-icon>
+            <div className="w-10 h-10 flex justify-center items-center">
+              <ion-icon name="search"></ion-icon>
+            </div>
           </div>
+          {/* )} */}
         </div>
         <div className="flex gap-x-4 text-xl cursor-pointer items-center">
           {userInfo === null ? (

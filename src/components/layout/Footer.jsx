@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { registerPromotion, reset } from "features/users/userSlice";
+import { registerPromotion, resetPromotion } from "features/users/userSlice";
 import React, { useRef, useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,21 +12,23 @@ const Footer = () => {
   const handleRegister = () => {
     dispatch(registerPromotion(email));
   };
-  const { isSuccess, isLoading, isError } = useSelector((state) => state.user);
+  const { isRegisterSuccess, isLoading, isRegisterError } = useSelector(
+    (state) => state.user
+  );
   const toastId = useRef(null);
   useEffect(() => {
-    if (!isLoading && isSuccess) {
+    if (!isLoading && isRegisterSuccess) {
       toast.dismiss(toastId.current);
-      toast.success("Register success", { containerId: "A" });
-      dispatch(reset());
-    } else if (!isLoading && isError) {
+      toast.success("Đăng ký thành công", { containerId: "A" });
+      dispatch(resetPromotion());
+    } else if (!isLoading && isRegisterError) {
       toast.dismiss(toastId.current);
-      toast.error("Register error", { containerId: "A" });
-      dispatch(reset());
+      toast.error("Đăng ký thất bại", { containerId: "A" });
+      dispatch(resetPromotion());
     } else if (isLoading) {
-      toastId.current = toast.info("Loading", { containerId: "A" });
+      toastId.current = toast.info("Đang xử lý", { containerId: "A" });
     }
-  }, [isSuccess, isLoading, isError]);
+  }, [isRegisterSuccess, isRegisterError]);
   return (
     <div className="bg-slate-300 mt-3">
       <div className="container">

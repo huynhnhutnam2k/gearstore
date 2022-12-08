@@ -142,11 +142,12 @@ const Order = () => {
   }, [isSuccess, isError]);
   const toastId = useRef();
   useEffect(() => {
-    if (isError && !isLoading) {
+    document.title = "Đơn hàng";
+    if (isError) {
       toast.dismiss(toastId.current);
       toast.error("Hủy đơn hàng thất bại", { containerId: "A" });
       dispatch(resetState());
-    } else if (isSuccess && !isLoading) {
+    } else if (isSuccess) {
       toast.dismiss(toastId.current);
       toast.success("Hủy đơn hàng thành công", { containerId: "A" });
       dispatch(resetState());

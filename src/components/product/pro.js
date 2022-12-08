@@ -9,8 +9,7 @@ const Pro = ({ item }) => {
   const { isMobile } = useSelector((state) => state.stateDevide);
   const handleClick = (item) => {
     const product = {
-      image1: item.image1,
-      image2: item.image2,
+      image: item.image,
       name: item.name,
       price: item.price,
       product: item._id,
@@ -19,7 +18,7 @@ const Pro = ({ item }) => {
       qty: 1,
     };
     dispatch(addOrderItem(product));
-    toast.success("Add successfully", { containerId: "A" });
+    toast.success("Thêm vào giỏ hàng thành công", { containerId: "A" });
   };
   return (
     <>
@@ -28,8 +27,9 @@ const Pro = ({ item }) => {
           <div className="absolute z-auto bg-gradient-to-r from-slate-300 to-slate-400 opacity-30 w-full h-full"></div>
         )}
         <div className="pro-top ">
-          <img src={item.image1} alt="" type="image/webp" />
-          <img src={item.image2} alt="" type="image/webp" />
+          {item.image.slice(0, 2).map((item) => (
+            <img src={item} alt="" type="image/webp" />
+          ))}
         </div>
         {item.salePercent !== 0 && (
           <div className="absolute top-5 right-5 w-[50px] h-[50px] flex justify-center items-center rounded-full bg-[#83c5be] text-xs text-white">
@@ -71,11 +71,24 @@ const Pro = ({ item }) => {
           <div className="max-w-[80%] truncate capitalize">{item.name}</div>
           {item.salePercent !== 0 ? (
             <div className="">
-              <span className="text-red-400 line-through">{item.price}</span>{" "}
-              {+item.price - (+item.price * item.salePercent) / 100}
+              <span className="text-red-400 line-through">
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(item.price)}
+              </span>{" "}
+              {new Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }).format(+item.price - (+item.price * item.salePercent) / 100)}
             </div>
           ) : (
-            <div className="">{item.price}</div>
+            <div className="">
+              {new Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }).format(item.price)}
+            </div>
           )}
         </div>
       </div>

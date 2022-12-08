@@ -11,11 +11,12 @@ export const promotionSlice = createSlice({
     isError: false,
   },
   reducers: {
-    resetState: (state) => {
+    resetPromtion: (state) => {
       state.isError = false;
       state.isLoading = false;
       state.msg = "";
       state.isSuccess = false;
+      state.promotion = null;
     },
   },
   extraReducers: (builder) => {
@@ -38,13 +39,16 @@ export const promotionSlice = createSlice({
 
 export const getPromotion = createAsyncThunk("promotion/get", async (code) => {
   try {
-    const res = await axios.post("http://localhost:3001/promotion/code", {
-      code: code,
-    });
+    const res = await axios.post(
+      "https://gearstorev2.onrender.com/promotion/code",
+      {
+        code: code,
+      }
+    );
     return res?.data;
   } catch (error) {
     console.log(error.response.data);
   }
 });
-export const { resetState } = promotionSlice.actions;
+export const { resetPromtion } = promotionSlice.actions;
 export default promotionSlice.reducer;

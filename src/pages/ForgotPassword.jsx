@@ -47,7 +47,6 @@ const ForgotPassword = () => {
               onClick={handleSend}
             >
               {isLoading ? (
-                // <Loading></Loading>
                 <div className="w-5 h-5 border-4 border-blue-500 rounded-full animate-spin border-t-transparent"></div>
               ) : (
                 <div className="">Nhận mã</div>
