@@ -1,5 +1,6 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
+import React, { useState } from "react";
 import { storage } from "../../firebase/config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useFormik } from "formik";
@@ -9,19 +10,21 @@ import { useCategoryStore } from "../../store/category-store";
 import { useEffect } from "react";
 import { useProductStore } from "../../store/product-store";
 import { useAuthStore } from "../../store/auth-store";
+// import { storage } from "../../firebase";
 import { toast } from "react-toastify";
+import { useRef } from "react";
 const ProductAdd = () => {
   const { listCategory, getListCategory } = useCategoryStore();
   const { userInfo } = useAuthStore();
-  const { addProduct, isSuccess, isError, resetState } = useProductStore();
+  const [images, setImages] = useState([]);
+  const { addProduct, isSuccess, isError, resetState, isLoading } =
+    useProductStore();
   useEffect(() => {
     getListCategory();
   }, []);
   const formik = useFormik({
     initialValues: {
       name: "",
-      image1: "",
-      image2: "",
       price: "",
       description: "",
       countInStock: "",
@@ -29,54 +32,82 @@ const ProductAdd = () => {
     },
     validationSchema: yup.object({
       name: yup.string().required(),
-      image1: yup.string().required(),
-      image2: yup.string().required(),
+      // image1: yup.string().required(),
+      // image2: yup.string().required(),
       price: yup.string().required(),
       description: yup.string().required(),
       countInStock: yup.string().required(),
       category: yup.string().required(),
     }),
     onSubmit: async (values) => {
-      if (values.image1 === "" || values.image2 === "null") return;
-      const image1Ref = ref(storage, `images/${values.image1.size + v4()}`);
-      const image2Ref = ref(storage, `images/${values.image2.size + v4()}`);
-
-      await uploadBytes(image1Ref, values.image1).then(() => {
-        console.log("Upload 1 success");
+      toastId.current = toast.info("Đang xử lý", {
+        containerId: "A",
+        autoClose: false,
       });
-      await uploadBytes(image2Ref, values.image2).then(() => {
-        console.log("Upload success");
-      });
-      let img1Url = "";
-      let img2Url = "";
-      await getDownloadURL(image1Ref).then((rs) => {
-        img1Url = rs;
-      });
-      await getDownloadURL(image2Ref).then((rs) => {
-        img2Url = rs;
-      });
+      let url = [];
+      for await (const image of images) {
+        const storageRef = ref(storage, `images/${image.name + v4()} `);
+        await uploadBytes(storageRef, image).then(() => {
+          console.log("Upload 1 success");
+        });
+        await getDownloadURL(storageRef)
+          .then((urls) => {
+            url.push(urls);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
       const makeProduct = {
         ...values,
-        image1: img1Url,
-        image2: img2Url,
+        image: url,
       };
       addProduct(makeProduct, userInfo?.token);
     },
   });
+  const toastId = useRef(null);
   useEffect(() => {
-    if (isSuccess) {
-      toast.success("Add successfully", { containerId: "A" });
+    if (!isLoading && isSuccess) {
+      toast.dismiss(toastId.current);
+      toast.success("Thêm sản phẩm thành công", { containerId: "A" });
+      resetState();
+    } else if (!isLoading && isError) {
+      toast.dismiss(toastId.current);
+      toast.error("Thêm sản phẩm thất bại", { containerId: "A" });
       resetState();
     }
-    if (isError) {
-      toast.error("Add failed", { containerId: "A" });
-      resetState();
+  }, [isSuccess, isError, isLoading]);
+
+  const handleChange = (e) => {
+    for (let i = 0; i < e.target.files.length; i++) {
+      const newImage = e.target.files[i];
+      newImage["id"] = Math.random();
+      setImages((prevState) => [...prevState, newImage]);
     }
-  }, [isSuccess, isError]);
+  };
+
+  // const handleUpload = async () => {
+  //   const promises = [];
+  //   images.map(async (image) => {
+  //     const storageRef = ref(storage, `files/${image.name}`);
+  //     const uploadTask = uploadBytesResumable(storageRef, image);
+  //     promises.push(uploadTask);
+  //     await uploadBytes(storageRef, image).then(() => {
+  //       console.log("Upload 1 success");
+  //     });
+  //     await getDownloadURL(storageRef)
+  //       .then((urls) => {
+  //         setUrls((prev) => [...prev, urls]);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   });
+  // };
   return (
     <div className="px-5">
       <div className="bg-purple-500 text-white w-[200px] p-2 relative before:content-[''] before:w-0 before:h-0 before:border-t-transparent before:border-t-[20px]  before:border-b-[20px] before:border-b-transparent before:border-l-[20px] before:border-l-purple-500 before:absolute before:-right-5 before:top-0 h-10 uppercase text-sm text-right flex justify-center items-center cursor-pointer">
-        Add products page
+        Trang thêm sản phẩm
       </div>
       <form
         action=""
@@ -85,7 +116,7 @@ const ProductAdd = () => {
         encType="multipart/form-data"
       >
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="name">Name product</label>
+          <label htmlFor="name">Tên sản phẩm</label>
           <input
             type="text"
             className="w-full p-2 border-2 border-black outline-none"
@@ -96,7 +127,7 @@ const ProductAdd = () => {
           />
         </div>
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="price">Price product</label>
+          <label htmlFor="price">Giá sản phẩm</label>
           <input
             type="text"
             className="w-full p-2 border-2 border-black outline-none"
@@ -107,7 +138,7 @@ const ProductAdd = () => {
           />
         </div>
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="countInStock">Count in stock </label>
+          <label htmlFor="countInStock">Số lượng sản phẩm</label>
           <input
             type="text"
             className="w-full p-2 border-2 border-black outline-none"
@@ -118,7 +149,7 @@ const ProductAdd = () => {
           />
         </div>
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="description">Description product</label>
+          <label htmlFor="description">Mô tả sản phẩm</label>
           <input
             type="text"
             className="w-full p-2 border-2 border-black outline-none"
@@ -129,7 +160,7 @@ const ProductAdd = () => {
           />
         </div>
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="category">Category </label>
+          <label htmlFor="category">Tên danh mục</label>
           <select
             name="category"
             id=""
@@ -137,7 +168,7 @@ const ProductAdd = () => {
             value={formik.values.category}
             className="w-full p-2 border-2 border-black outline-none"
           >
-            <option value="#">Category</option>
+            <option value="#">Danh mục</option>
             {listCategory.map((item) => (
               <option value={item._id} className="capitalize font-bold">
                 {item.name}
@@ -146,34 +177,20 @@ const ProductAdd = () => {
           </select>
         </div>
         <div className="flex flex-col gap-y-2">
-          <label htmlFor="image1">Image 1 </label>
+          <label htmlFor="image">Hình ảnh sản phẩm</label>
           <input
             type="file"
             className="w-full p-2 border-2 border-black outline-none"
-            id="image1"
-            name="image1"
-            onChange={(e) => {
-              formik.setFieldValue("image1", e.target.files[0]);
-            }}
-          />
-        </div>
-        <div className="flex flex-col gap-y-2">
-          <label htmlFor="image2">Image 2 </label>
-          <input
-            type="file"
-            className="w-full p-2 border-2 border-black outline-none"
-            id="image2"
-            name="image2"
-            onChange={(e) => {
-              formik.setFieldValue("image2", e.target.files[0]);
-            }}
+            multiple
+            onChange={handleChange}
+            // name="image"
           />
         </div>
         <button
           type="submit"
           className="w-full mt-2 p-2 border-2 border-black bg-[#000] text-[#fff] flex justify-center uppercase hover:text-[#000] hover:bg-[#fff] duration-200"
         >
-          Submit
+          Thêm sản phẩm
         </button>
       </form>
     </div>

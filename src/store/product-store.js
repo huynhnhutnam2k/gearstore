@@ -6,6 +6,7 @@ export const useProductStore = create((set) => ({
   keyword: "",
   msg: "",
   isLoading: false,
+  isLoadingDel: false,
   isSuccess: false,
   isError: false,
   setKeyword: (e) => {
@@ -17,7 +18,7 @@ export const useProductStore = create((set) => ({
   fetch: async () => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.get("http://localhost:3001/product");
+      const res = await axios.get("product");
       set(() => ({ isLoading: false, products: res.data }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
@@ -28,9 +29,7 @@ export const useProductStore = create((set) => ({
     set(() => ({ isLoading: true }));
     try {
       const keyword = useProductStore.getState().keyword;
-      const res = await axios.get(
-        `http://localhost:3001/product/search/${keyword}`
-      );
+      const res = await axios.get(`product/search/${keyword}`);
       set(() => ({ isLoading: false, products: res.data }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
@@ -39,7 +38,7 @@ export const useProductStore = create((set) => ({
   addProduct: async (product, token) => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.post("http://localhost:3001/product", product, {
+      const res = await axios.post("product", product, {
         headers: {
           "Content-Type": "application/json",
           token: `Bearer ${token}`,
@@ -54,7 +53,7 @@ export const useProductStore = create((set) => ({
   getAProduct: async (id) => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.get(`http://localhost:3001/product/${id}`);
+      const res = await axios.get(`product/${id}`);
       set(() => ({ isLoading: false, product: res.data }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
@@ -63,33 +62,29 @@ export const useProductStore = create((set) => ({
   updateAProduct: async (id, product, token) => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.put(
-        `http://localhost:3001/product/${id}`,
-        product,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            token: `Bearer ${token}`,
-          },
-        }
-      );
-      set(() => ({ isLoading: false, msg: res.data }));
-    } catch (error) {
-      set(() => ({ isLoading: false, isError: true }));
-    }
-  },
-  deleteAProduct: async (id, token) => {
-    set(() => ({ isLoading: false }));
-    try {
-      const res = await axios.delete(`http://localhost:3001/product/${id}`, {
+      const res = await axios.put(`product/${id}`, product, {
         headers: {
           "Content-Type": "application/json",
           token: `Bearer ${token}`,
         },
       });
-      set(() => ({ isLoading: false, msg: res.data }));
+      set(() => ({ isLoading: false, msg: res.data, isSuccess: true }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
+    }
+  },
+  deleteAProduct: async (id, token) => {
+    set(() => ({ isLoadingDel: false }));
+    try {
+      const res = await axios.delete(`product/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${token}`,
+        },
+      });
+      set(() => ({ isLoadingDel: false, msg: res.data, isSuccess: true }));
+    } catch (error) {
+      set(() => ({ isLoadingDel: false, isError: true }));
     }
   },
   sort: (keyword) => {

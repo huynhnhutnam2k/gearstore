@@ -12,35 +12,35 @@ const sidebarNav = [
     text: "Category",
   },
   {
-    link: "/orders",
-    section: "orders",
-    icon: <i className="bx bx-receipt"></i>,
-    text: "Orders",
-  },
-  {
     link: "/products",
     section: "products",
     icon: <i className="bx bx-cube"></i>,
     text: "Products",
   },
   {
-    link: "/customers",
-    section: "customers",
-    icon: <i className="bx bx-user"></i>,
-    text: "Customers",
+    link: "/orders",
+    section: "orders",
+    icon: <i className="bx bx-receipt"></i>,
+    text: "Orders",
   },
   {
-    link: "/chats",
-    section: "chats",
-    icon: <i class="bx bx-message-rounded-dots"></i>,
-    text: "Chats",
+    link: "/promotion",
+    section: "Voucher",
+    icon: <i class="bx bx-money-withdraw"></i>,
+    text: "Voucher",
   },
-  {
-    link: "/settings",
-    section: "settings",
-    icon: <i className="bx bx-cog"></i>,
-    text: "Settings",
-  },
+  // {
+  //   link: "/chats",
+  //   section: "chats",
+  //   icon: <i class="bx bx-message-rounded-dots"></i>,
+  //   text: "Chats",
+  // },
+  // {
+  //   link: "/settings",
+  //   section: "settings",
+  //   icon: <i className="bx bx-cog"></i>,
+  //   text: "Settings",
+  // },
 ];
 
 export default sidebarNav;

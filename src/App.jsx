@@ -18,7 +18,13 @@ const OrderRender = React.lazy(() => import("./pages/order/OrderRender"));
 const OrderDetail = React.lazy(() => import("./pages/order/OrderDetail"));
 const ChatContent = React.lazy(() => import("./pages/chat/Chat"));
 const LoginPage = React.lazy(() => import("./pages/Login"));
-
+const PromotionAdd = React.lazy(() => import("./pages/promotion/PromotionAdd"));
+const PromotionRender = React.lazy(() =>
+  import("./pages/promotion/PromotionRender")
+);
+const PromotionEdit = React.lazy(() =>
+  import("./pages/promotion/PromotionEdit")
+);
 function App() {
   return (
     <BrowserRouter>
@@ -34,6 +40,9 @@ function App() {
             <Route path="edit-products/:id" element={<ProductEdit />} />
             <Route path="orders" element={<OrderRender />} />
             <Route path="orders/:id" element={<OrderDetail />} />
+            <Route path="promotion" element={<PromotionRender />} />
+            <Route path="add-promotion" element={<PromotionAdd />} />
+            <Route path="promotion/:id" element={<PromotionEdit />} />
             <Route path="chats" element={<ChatContent />} />
             <Route path="stats" element={<Blank />} />
           </Route>

@@ -1,6 +1,35 @@
 import axios from "axios";
 import create from "zustand";
-const option = ["pending", "processing", "shipping", "completed", "cancelled"];
+// const option = ["pending", "processing", "shipping", "completed", "cancelled"];
+const option = [
+  {
+    value: "pending",
+    display: "Chờ xác nhận",
+  },
+  {
+    value: "processing",
+    display: "Chờ lấy hàng",
+  },
+  {
+    value: "shipping",
+    display: "Đang giao",
+  },
+  {
+    value: "completed",
+    display: "Hoàn tất",
+  },
+  {
+    value: "cancelled",
+    display: "Đã hủy",
+  },
+];
+// const option = [
+//   "Chờ xác nhận",
+//   "Chờ lấy hàng",
+//   "Đang giao",
+//   "Hoàn tất",
+//   "Đã hủy",
+// ];
 export const useOrderStore = create((set, get) => ({
   orders: [],
   order: {},
@@ -84,7 +113,7 @@ export const useOrderStore = create((set, get) => ({
   getOrderForUser: async (id) => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.get(`http://localhost:3001/order/${id}`);
+      const res = await axios.get(`order/${id}`);
       set(() => ({ isLoading: false, order: res.data }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
@@ -93,7 +122,7 @@ export const useOrderStore = create((set, get) => ({
   getOrderDetail: async (id) => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.get(`http://localhost:3001/order/${id}`);
+      const res = await axios.get(`order/${id}`);
       set(() => ({ isLoading: false, order: res.data }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
@@ -102,7 +131,21 @@ export const useOrderStore = create((set, get) => ({
   editOrder: async (id, order, token) => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.put(`http://localhost:3001/order/${id}`, order, {
+      const res = await axios.put(`order/${id}`, order, {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${token}`,
+        },
+      });
+      set(() => ({ isLoading: false, msg: res.data, isSuccess: true }));
+    } catch (error) {
+      set(() => ({ isLoading: false, isError: true }));
+    }
+  },
+  deleteOrder: async (id, token) => {
+    set(() => ({ isLoading: true }));
+    try {
+      const res = await axios.delete(`order/${id}`, {
         headers: {
           "Content-Type": "application/json",
           token: `Bearer ${token}`,
