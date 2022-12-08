@@ -54,16 +54,27 @@ const productController = {
   getAll: async (req, res) => {
     try {
       const { categoryId } = req.query || undefined;
-      const limit = req.query.limit || 10;
+      const limit = req.query.limit < 50 ? req.query.limit : undefined;
       let products = [];
       if (categoryId === undefined) {
-        products = await Product.find()
-          .limit(limit)
-          .populate("category", "name");
+        if (limit !== undefined) {
+          products = await Product.find()
+            .limit(limit)
+            .populate("category", "name");
+        } else {
+          products = await Product.find().populate("category", "name");
+        }
       } else {
-        products = await Product.find({ category: categoryId })
-          .limit(limit)
-          .populate("category", "name");
+        if (limit !== undefined) {
+          products = await Product.find({ category: categoryId })
+            .limit(limit)
+            .populate("category", "name");
+        } else {
+          products = await Product.find({ category: categoryId }).populate(
+            "category",
+            "name"
+          );
+        }
       }
 
       res.status(200).json(products);

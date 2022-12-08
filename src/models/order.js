@@ -40,14 +40,6 @@ const orderSchema = mongoose.Schema(
       enum: ["pending", "processing", "shipping", "completed", "cancelled"],
       default: "pending",
     },
-    isDelivered: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    deliveredAt: {
-      type: Date,
-    },
   },
   {
     timestamps: true,

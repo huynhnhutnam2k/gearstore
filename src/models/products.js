@@ -38,7 +38,7 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    slug: { type: String, slug: "name" },
+    // slug: { type: String, slug: "name" },
     reviews: [reviewSchema],
     rating: { type: Number, required: true, default: 5 },
     numReviews: { type: Number, required: true, default: 0 },
