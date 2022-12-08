@@ -13,7 +13,10 @@ export const usePromotionStore = create((set) => ({
   create: async (body) => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.post("http://localhost:3001/promotion", body);
+      const res = await axios.post(
+        "https://gearstorev2.onrender.com/promotion",
+        body
+      );
       set(() => ({ promotion: res.data, isSuccess: true, isLoading: false }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
@@ -22,7 +25,7 @@ export const usePromotionStore = create((set) => ({
   fetch: async () => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.get("http://localhost:3001/promotion");
+      const res = await axios.get("https://gearstorev2.onrender.com/promotion");
       localStorage &&
         localStorage.setItem("promotions", JSON.stringify(res.data));
       set(() => ({ promotions: res.data, isLoading: false }));
@@ -42,7 +45,7 @@ export const usePromotionStore = create((set) => ({
   delete: async (id) => {
     set(() => ({ isLoading: true }));
     try {
-      await axios.delete(`http://localhost:3001/promotion/${id}`);
+      await axios.delete(`https://gearstorev2.onrender.com/promotion/${id}`);
       set(() => ({ isLoading: false, isSuccess: true }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));

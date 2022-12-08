@@ -12,7 +12,7 @@ export const useCategoryStore = create((set) => ({
   getListCategory: async () => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.get("category");
+      const res = await axios.get("https://gearstorev2.onrender.com/category");
       set(() => ({ isLoading: false, listCategory: res.data }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
@@ -22,7 +22,7 @@ export const useCategoryStore = create((set) => ({
     set(() => ({ isLoading: true }));
     try {
       await axios.post(
-        "category",
+        "https://gearstorev2.onrender.com/category",
         {
           name,
         },
@@ -41,7 +41,7 @@ export const useCategoryStore = create((set) => ({
   deleteCategory: async (id, token) => {
     set(() => ({ isLoading: true }));
     try {
-      await axios.delete("category/" + id, {
+      await axios.delete("https://gearstorev2.onrender.com/category/" + id, {
         headers: {
           token: `Bearer ${token}`,
         },

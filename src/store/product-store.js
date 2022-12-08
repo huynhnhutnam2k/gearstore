@@ -18,7 +18,7 @@ export const useProductStore = create((set) => ({
   fetch: async () => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.get("product");
+      const res = await axios.get("https://gearstorev2.onrender.com/product");
       set(() => ({ isLoading: false, products: res.data }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
@@ -29,7 +29,9 @@ export const useProductStore = create((set) => ({
     set(() => ({ isLoading: true }));
     try {
       const keyword = useProductStore.getState().keyword;
-      const res = await axios.get(`product/search/${keyword}`);
+      const res = await axios.get(
+        `https://gearstorev2.onrender.com/product/search/${keyword}`
+      );
       set(() => ({ isLoading: false, products: res.data }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
@@ -38,12 +40,16 @@ export const useProductStore = create((set) => ({
   addProduct: async (product, token) => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.post("product", product, {
-        headers: {
-          "Content-Type": "application/json",
-          token: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.post(
+        "https://gearstorev2.onrender.com/product",
+        product,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            token: `Bearer ${token}`,
+          },
+        }
+      );
       set(() => ({ isLoading: false, product: res.data, isSuccess: true }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
@@ -53,7 +59,9 @@ export const useProductStore = create((set) => ({
   getAProduct: async (id) => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.get(`product/${id}`);
+      const res = await axios.get(
+        `https://gearstorev2.onrender.com/product/${id}`
+      );
       set(() => ({ isLoading: false, product: res.data }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
@@ -62,12 +70,16 @@ export const useProductStore = create((set) => ({
   updateAProduct: async (id, product, token) => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.put(`product/${id}`, product, {
-        headers: {
-          "Content-Type": "application/json",
-          token: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.put(
+        `https://gearstorev2.onrender.com/product/${id}`,
+        product,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            token: `Bearer ${token}`,
+          },
+        }
+      );
       set(() => ({ isLoading: false, msg: res.data, isSuccess: true }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
@@ -76,12 +88,15 @@ export const useProductStore = create((set) => ({
   deleteAProduct: async (id, token) => {
     set(() => ({ isLoadingDel: false }));
     try {
-      const res = await axios.delete(`product/${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          token: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.delete(
+        `https://gearstorev2.onrender.com/product/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            token: `Bearer ${token}`,
+          },
+        }
+      );
       set(() => ({ isLoadingDel: false, msg: res.data, isSuccess: true }));
     } catch (error) {
       set(() => ({ isLoadingDel: false, isError: true }));

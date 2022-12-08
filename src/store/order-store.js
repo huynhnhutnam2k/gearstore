@@ -79,7 +79,7 @@ export const useOrderStore = create((set, get) => ({
   fetchAll: async () => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.get("order");
+      const res = await axios.get("https://gearstorev2.onrender.com/order");
       const { sort } = useOrderStore.getState();
       if (sort !== "") {
         switch (sort) {
@@ -113,7 +113,9 @@ export const useOrderStore = create((set, get) => ({
   getOrderForUser: async (id) => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.get(`order/${id}`);
+      const res = await axios.get(
+        `https://gearstorev2.onrender.com/order/${id}`
+      );
       set(() => ({ isLoading: false, order: res.data }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
@@ -122,7 +124,9 @@ export const useOrderStore = create((set, get) => ({
   getOrderDetail: async (id) => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.get(`order/${id}`);
+      const res = await axios.get(
+        `https://gearstorev2.onrender.com/order/${id}`
+      );
       set(() => ({ isLoading: false, order: res.data }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
@@ -131,12 +135,16 @@ export const useOrderStore = create((set, get) => ({
   editOrder: async (id, order, token) => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.put(`order/${id}`, order, {
-        headers: {
-          "Content-Type": "application/json",
-          token: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.put(
+        `https://gearstorev2.onrender.com/order/${id}`,
+        order,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            token: `Bearer ${token}`,
+          },
+        }
+      );
       set(() => ({ isLoading: false, msg: res.data, isSuccess: true }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));
@@ -145,12 +153,15 @@ export const useOrderStore = create((set, get) => ({
   deleteOrder: async (id, token) => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.delete(`order/${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          token: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.delete(
+        `https://gearstorev2.onrender.com/order/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            token: `Bearer ${token}`,
+          },
+        }
+      );
       set(() => ({ isLoading: false, msg: res.data, isSuccess: true }));
     } catch (error) {
       set(() => ({ isLoading: false, isError: true }));

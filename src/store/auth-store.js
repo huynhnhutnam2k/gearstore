@@ -12,7 +12,10 @@ export const useAuthStore = create((set) => ({
   login: async (user) => {
     set(() => ({ isLoading: true }));
     try {
-      const res = await axios.post("user/login", user);
+      const res = await axios.post(
+        "https://gearstorev2.onrender.com/user/login",
+        user
+      );
       localStorage &&
         localStorage.setItem("userInfo", JSON.stringify(res.data));
       window.location.href = "/";
